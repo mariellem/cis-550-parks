@@ -2,6 +2,7 @@
 CIS 550: Databases & Information Systems
 Group Project
 
+<h1> National Parks & Trails Project </h1>
 
 <h2>Brainstorming </h2>
 
