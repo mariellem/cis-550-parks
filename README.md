@@ -8,11 +8,13 @@ Group Project
 
 <h3>Data Sources </h3>
 
-- National Parks Services (NPS)
+- National Parks Services Datasets (NPS)
+  - National Parks API
 - National Oceanic and Atmospheric Administration (NOAA)
 - AllTrails 
 - Yelp
 - Google Maps 
+  - Google Maps API (?)
 
 
 <h3> Data of Interest </h3>
