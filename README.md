@@ -13,6 +13,7 @@ Group Project
 - National Oceanic and Atmospheric Administration (NOAA)
 - Yelp (API)
 - Google Maps (API)
+  - (BR): I've used this before, did some looking into it and could very easily pull in all the park data into a CSV and/or JSON file, api response for rocky mountain ehre: https://drive.google.com/file/d/1eSyY1cdmYMKO8bWxuvmKMTkSdH7j3zKP/view?usp=sharing
 - Scrape
   - Hiking Project (REI)
   - AllTrails 
