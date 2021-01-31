@@ -24,8 +24,11 @@ Group Project
 
 - Parks
   - Visitor Stats (overall/seasonal/daily)
+      - https://drive.google.com/file/d/17hIZw9_M27iotPUw143EcbiSRb1UnttW/view?usp=sharing - Annual Attendance from 2016 with description and image URLs source: https://data.world/kevinnayar/us-national-parks
+      - https://drive.google.com/file/d/15wnCFsIOmJ_XGONGiVoPR2sLAOBwgxMm/view?usp=sharing - Annual Attendance from 1906 - 2016 source: https://data.world/inform8n/us-national-parks-visitation-1904-2016-with-boundaries 
   - Major points of Interest
   - Ratings
+    - https://drive.google.com/file/d/1AfpQvnkj_V4i3LpzM8Ic7I-RXOJnVgak/view?usp=sharing - Ratings from backcountry campers 2008 - 2016, source: https://data.world/nps/annual-park-ranking-backcountry-campers
 - Trails
   - Ratings
   - Photos
