@@ -8,7 +8,7 @@ import csv
 
 #Variables
 
-apiKey = "AIzaSyBJ2dwZkpz0ewcMB_qvbGyrZBEYIFf5D9E"
+apiKey = ""
 urlPrefix = "https://maps.googleapis.com/maps/api/place/details/json?place_id="
 writeFile = 'C:/Users/Bryan Rogers/Dropbox/MCIT/CIS550/Project/Parks.csv'
 reviewFile = 'C:/Users/Bryan Rogers/Dropbox/MCIT/CIS550/Project/Reviews.csv'
