@@ -19,6 +19,9 @@ Group Project
 
 - Historical Weather Data (API) - can get free trial
   - https://www.worldweatheronline.com/hwd/
+  - 60 day Free Trial Until 6 Apr 21:  mossb@seas.upenn.edu
+  - PW: 550Project!
+  - Trial API Key:  10fbca6b178e4fafb0d165822210502
 
 - Scrape (if needed)
   - Hiking Project (REI)
@@ -38,6 +41,10 @@ Group Project
 - Trails
   - Ratings
   - Photos
+
+- Weather Data
+  - Historical Monthly Averages for All Parks
+  - Current daily weather at any park
 
 <h2> Final Product Ideas </h2>
 
