@@ -68,7 +68,7 @@ Group Project
 - Include National Historic and other parks
 
 
-<b> Addtl functionalities </b>
+<b> Addtl Misc ideas </b>
 
 - Hike recommendation system
   - Ex: recommend a hike to a User based on User difficulty preferences, current location, current weather, and ratings 
