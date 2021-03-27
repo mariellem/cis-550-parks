@@ -1,0 +1,34 @@
+.jumbotron1 {
+  background:rgba(200, 200, 200, 0.0);
+}
+
+.jumbotron2 {
+  background:rgba(200, 200, 200, 0.8);
+}
+
+.parks-container {
+  display: flex;
+  flex-flow: column wrap;
+  margin-top: 10px;
+}
+
+.parks-container .park {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 40px;
+  padding: 0 10px;
+}
+
+.parks-container .parkResults {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 40px;
+  padding: 0 10px;
+}
+
+
+.park .header, .parkResults .name, .parkResults .address, .parkResults .phoneNumber, .parkResults .rating {
+  flex: 1 0 25%;
+}
