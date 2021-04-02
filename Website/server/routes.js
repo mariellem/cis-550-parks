@@ -101,9 +101,14 @@ function getReviews(req, res) {
 }
 
 function getPhotos(req, res) {
+  let inputPark = req.params.parkInput
 	var query = `
-    SELECT * FROM photos LIMIT 50
+    SELECT * FROM photos p 
+    JOIN park_details pd 
+    on p.parkId = pd.parkId
+    WHERE pd.name = '${inputPark}';
   `;
+  console.log(query);
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
     else {
@@ -111,6 +116,7 @@ function getPhotos(req, res) {
     }
   });
 }
+
 
 
 

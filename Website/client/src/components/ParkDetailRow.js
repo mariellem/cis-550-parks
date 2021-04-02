@@ -13,6 +13,7 @@ export default class ParkDetailRow extends React.Component {
 				<div className="address">{this.props.address}</div>
 				<div className="phoneNumber">{this.props.phoneNumber}</div>
 				<div className="rating">{this.props.rating}</div>
+				<div className ="totalreviews">{this.props.totalRatings}</div>
 			</div>
 		);
 	}

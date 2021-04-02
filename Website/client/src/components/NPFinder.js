@@ -1,6 +1,7 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
 import ParkDetailRow from './ParkDetailRow';
+import ParkPhotoRow from './ParkPhotoRow';
 import '../style/NPFinder.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -66,7 +67,7 @@ export default class NPFinder extends React.Component {
 		}).then(ParkList => {
 			console.log(ParkList); //displays your JSON object in the console
     	let parkDivs = ParkList.map((parkDetailObj, i) => 
-       	 <ParkDetailRow name={parkDetailObj.name} address={parkDetailObj.address} phoneNumber={parkDetailObj.phoneNumber} rating={parkDetailObj.rating}/>
+       	 <ParkDetailRow name={parkDetailObj.name} address={parkDetailObj.address} phoneNumber={parkDetailObj.phoneNumber} rating={parkDetailObj.rating} totalRatings = {parkDetailObj.totalRatings}/>
     	);
 		//This saves our HTML representation of the data into the state, which we can call in our render function
 		this.setState({
@@ -75,43 +76,72 @@ export default class NPFinder extends React.Component {
     	}, err => {
      	 // Print the error if there is one.
      	 console.log(err);
-    	});  
+    	});
+		
+		fetch("http://localhost:8081/photos/" + parkInput,
+		{
+			method: "GET"
+		}).then(res => {
+			return res.json();
+		}, err => {
+			console.log(err);
+		}).then(parkImage => {
+			console.log(parkImage);
+			let parkImg = parkImage.map((imageObj, i) =>
+			<ParkPhotoRow imageUrl={imageObj.image1loc} credit={imageObj.image1credit} name = {imageObj.name} />
+			);
+
+			this.setState({
+				parkPhoto: parkImg
+			})
+
+		}, 
+		err => {
+			console.log(err)
+		});
 	}
 	render() {
 
 		return (
 			<div className="NPFinder">
-				<PageNavbar active="Finder" />
+			<PageNavbar active="Finder" />
 
-				<div className="container np-container">
-			      <div className="jumbotron1">
-			        <div className="h5">Get National Park Information</div>
+			<div className="container np-container">
+			  <div className="jumbotron1">
+				<div className="h5">Get National Park Information</div>
 
-			        <div className="years-container">
-			          <div className="dropdown-container">
-			            <select value={this.state.selectedPark} onChange={this.handleChange} className="dropdown" id="parksDropdown">
-			            	<option select value> -- select an option -- </option>
-			            	{this.state.parks}
-			            </select>
-			            <button className="submit-btn" id="decadesSubmitBtn" onClick={this.submitPark}>Submit</button>
-			          </div>
-			        </div>
-			      </div>
-			      <div className="jumbotron2">
-			        <div className="parks-container">
-			          <div className="park">
-			            <div className="header"><strong>Park</strong></div>
-			            <div className="header"><strong>Address</strong></div>
-			            <div className="header"><strong>Phone Number</strong></div>
-			            <div className="header"><strong>Rating</strong></div>
-			          </div>
-			          <div className="parks-container" id="parkResults">
-			            {this.state.parkDetail}
-			          </div>
-			        </div>
-			      </div>
-			    </div>
+				<div className="years-container">
+				  <div className="dropdown-container">
+					<select value={this.state.selectedPark} onChange={this.handleChange} className="dropdown" id="parksDropdown">
+						<option select value> -- select an option -- </option>
+						{this.state.parks}
+					</select>
+					<button className="submit-btn" id="decadesSubmitBtn" onClick={this.submitPark}>Submit</button>
+				  </div>
+				</div>
+			  </div>
+			  	<div className = "jumbotron2">
+				  <div className="parksPhoto">
+				  		<div className="parks-container" id="parkResults">
+			            	{this.state.parkPhoto}
+			          	</div>
+				  </div>    
+				</div>
+			  <div className="jumbotron2">
+				<div className="parks-container">
+				  <div className="park">
+					<div className="header"><strong>Park</strong></div>
+					<div className="header"><strong>Address</strong></div>
+					<div className="header"><strong>Phone Number</strong></div>
+					<div className="header"><strong>Rating</strong></div>
+				  </div>
+				  <div className="parks-container" id="parkResults">
+					{this.state.parkDetail}
+				  </div>
+				</div>
+			  </div>
 			</div>
+		</div>
 		);
 	}
 }
