@@ -8,11 +8,70 @@ export default class ParkPhotoRow extends React.Component {
 
 	render() {
 		return (
+        <table class="infobox">
+        <tbody>
+			
+            <tr>
+           
+            <td>
+                <div className="parkName" align="center"><b>{this.props.name}</b> </div>
+                </td>
             
-			<div className="parkPhoto">
-                <div className="parkName">{this.props.name} <br/></div>
-                <img src={this.props.imageUrl} alt={this.props.credit}></img>
-			</div>
+            </tr>
+            
+            <tr>
+           
+            <td>
+            <img src={this.props.imageUrl} alt={this.props.credit}></img>
+            </td>
+            </tr>
+            <tr>
+                <th>
+                    <div>Location</div>
+                </th>
+                <td>
+                    <div>{this.props.location}</div>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <div>Latitude</div>
+                </th>
+                <td>
+                    <div>{this.props.lat}</div>
+                </td>
+            </tr> 
+
+            <tr>
+                <th>
+                    <div>Longitude</div>
+                </th>
+                <td>
+                    <div>{this.props.lng}</div>
+                </td>
+            </tr> 
+
+            <tr>
+                <th>
+                    <div>Rating</div>
+                </th>
+                <td>
+                    <div>{this.props.rating}</div>
+                </td>
+            </tr>   
+
+            <tr>
+                <th>
+                    <div>Website</div>
+                </th>
+                <td>
+                    <div>{this.props.website}</div>
+                </td>
+            </tr>  
+                
+            </tbody>
+            </table>
 		);
 	}
 }

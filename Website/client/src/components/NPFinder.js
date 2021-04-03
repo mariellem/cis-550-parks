@@ -88,7 +88,7 @@ export default class NPFinder extends React.Component {
 		}).then(parkImage => {
 			console.log(parkImage);
 			let parkImg = parkImage.map((imageObj, i) =>
-			<ParkPhotoRow imageUrl={imageObj.image1loc} credit={imageObj.image1credit} name = {imageObj.name} />
+			<ParkPhotoRow imageUrl={imageObj.image1loc} credit={imageObj.image1credit} name = {imageObj.name} phone={imageObj.phoneNumber} rating={imageObj.rating} location={imageObj.address} lat={imageObj.lat} lng={imageObj.lng} website={imageObj.websiteUrl}/>
 			);
 
 			this.setState({
@@ -120,14 +120,22 @@ export default class NPFinder extends React.Component {
 				  </div>
 				</div>
 			  </div>
-			  	<div className = "jumbotron2">
-				  <div className="parksPhoto">
-				  		<div className="parks-container" id="parkResults">
+			  	
+				  <div className="jumbotron2">
+				  		<div className="infobox" id="parkResults" align="right">
 			            	{this.state.parkPhoto}
 			          	</div>
 				  </div>    
-				</div>
-			  <div className="jumbotron2">
+				
+			  
+			</div>
+		</div>
+		);
+	}
+}
+
+/*
+<div className="jumbotron2">
 				<div className="parks-container">
 				  <div className="park">
 					<div className="header"><strong>Park</strong></div>
@@ -140,8 +148,4 @@ export default class NPFinder extends React.Component {
 				  </div>
 				</div>
 			  </div>
-			</div>
-		</div>
-		);
-	}
-}
+			  */

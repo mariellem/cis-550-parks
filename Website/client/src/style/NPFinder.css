@@ -36,6 +36,20 @@
   padding: 0 10px;
 }
 
+.parks-container .infobox{
+  border: 1px solid #a2a9b1;
+  border-spacing: 3px;
+  background-color:#f8f9fa;
+  color: black;
+  margin: 0.5em 0 0.5em 1em;
+  padding: 0.2em;
+  float: right;
+  clear: right;
+  font-size: 88%;
+  line-height: 1.5em;
+  width: 22em;
+}
+
 
 .park .header, .parkResults .name, .parkResults .address, .parkResults .phoneNumber, .parkResults .rating, .parkResults .totalRatings {
   flex: 1 0 25%;
