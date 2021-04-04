@@ -1,3 +1,8 @@
+Website/client/package-lock.json
+Website/server/package-lock.json
+Website/client/package.json
+Website/server/package.json
+
 # config file with secret key
 config.py
 
