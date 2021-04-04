@@ -14,6 +14,7 @@ export default class NPFinder extends React.Component {
 
 		this.state = {
 			selectedPark: urlParams.get('park'),
+			imageLink: '/public/bg.jpg',
 			parks: [],
 			parkDetail: []
 		};
@@ -48,8 +49,10 @@ export default class NPFinder extends React.Component {
 		  // Print the error if there is one.
 		  console.log(err);
 		});
-
-		this.submitPark()
+		if (this.state.selectedPark != null) {
+			this.submitPark()
+		}
+		
 	}
 
 	handleChange(e) {
@@ -60,7 +63,8 @@ export default class NPFinder extends React.Component {
 
 	/* ---- Q3b (Best Genres) ---- */
 	submitPark() {
-		
+		console.log("Submitted the park")
+		console.log(this.state.selectedPark)
 		let parkInput = this.state.selectedPark;
 		/*
 		fetch("http://localhost:8081/parkDetails/" + parkInput,
@@ -87,6 +91,8 @@ export default class NPFinder extends React.Component {
 
 
 		//Fetch the park detail information and photo and save it to park photo
+		let image2 = "/public/bg.jpg"
+		
 		fetch("http://localhost:8081/photos/" + parkInput,
 		{
 			method: "GET"
@@ -98,12 +104,17 @@ export default class NPFinder extends React.Component {
 			console.log(parkImage);
 			//save the image and park details to a park info box object
 			let parkImg = parkImage.map((imageObj, i) =>
-			<ParkInfoBox imageUrl={imageObj.image1loc} credit={imageObj.image1credit} name = {imageObj.name} phone={imageObj.phoneNumber} rating={imageObj.rating} location={imageObj.address} lat={imageObj.lat} lng={imageObj.lng} website={imageObj.websiteUrl}/>
+			(image2 = imageObj.image2loc,
+			<ParkInfoBox imageUrl={imageObj.image1loc} credit={imageObj.image1credit} name = {imageObj.name} phone={imageObj.phoneNumber} rating={imageObj.rating} location={imageObj.address} lat={imageObj.lat} lng={imageObj.lng} website={imageObj.websiteUrl}/>)
+			
 			);
 			//update the state to have the park image
 			this.setState({
-				parkPhoto: parkImg
+				parkPhoto: parkImg,
+				imageLink: image2
 			})
+			console.log("Reset image Link")
+			console.log(this.state.imageLink)
 
 		}, 
 		err => {
@@ -129,6 +140,7 @@ export default class NPFinder extends React.Component {
 			this.setState({
 				nearbyParks: nearbyPark
 			})
+			
 
 		}, 
 		err => {
@@ -145,8 +157,13 @@ export default class NPFinder extends React.Component {
 			"text-transform": 'uppercase',
 		};
 
+		console.log("About to reset the background with:")
+		console.log(this.state.imageLink)
+		//console.log(this.props.selectedPark)
+
 		return (
-			<div className="NPFinder">
+			
+			<div className="NPFinder" style={{ 	backgroundImage: `url(${this.state.imageLink})`, backgroundSize: 'cover'}}>
 			<PageNavbar active="Finder" />
 
 			<div className="container np-container">
