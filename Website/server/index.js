@@ -27,7 +27,9 @@ app.get('/parkAttendance', routes.getParkAttendance);
 
 app.get('/reviews', routes.getReviews);
 
-app.get('/photos', routes.getPhotos);
+app.get('/photos/:parkInput', routes.getPhotos);
+
+app.get('/nearbyParks/:parkInput', routes.getNearbyParks);
 
 
 

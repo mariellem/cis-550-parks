@@ -28,7 +28,7 @@ def processFile(filename, tablename):
                 prefix += str(headers[x]) + ", "
         rowCount = 0
         for row in csvreader:
-            if  (rowCount >= 10):
+            if  (rowCount >= 0):
                 suffix = " VALUES("
                 for x in range(columnNums):
                     text = str(row[x]).encode('unicode-escape').decode('utf-8').replace('"', '')

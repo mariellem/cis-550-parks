@@ -1,15 +1,20 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
 import ParkDetailRow from './ParkDetailRow';
+import ParkInfoBox from './ParkInfoBox';
+import ParkSummary from './ParkSummary'
 import '../style/NPFinder.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class NPFinder extends React.Component {
 	constructor(props) {
 		super(props);
+		const queryString= window.location.search
+		let urlParams = new URLSearchParams(queryString)
 
 		this.state = {
-			selectedPark: "",
+			selectedPark: urlParams.get('park'),
+			imageLink: '/public/bg.jpg',
 			parks: [],
 			parkDetail: []
 		};
@@ -44,6 +49,10 @@ export default class NPFinder extends React.Component {
 		  // Print the error if there is one.
 		  console.log(err);
 		});
+		if (this.state.selectedPark != null) {
+			this.submitPark()
+		}
+		
 	}
 
 	handleChange(e) {
@@ -54,8 +63,10 @@ export default class NPFinder extends React.Component {
 
 	/* ---- Q3b (Best Genres) ---- */
 	submitPark() {
-		
+		console.log("Submitted the park")
+		console.log(this.state.selectedPark)
 		let parkInput = this.state.selectedPark;
+		/*
 		fetch("http://localhost:8081/parkDetails/" + parkInput,
 		{
 			method: "GET"
@@ -66,7 +77,7 @@ export default class NPFinder extends React.Component {
 		}).then(ParkList => {
 			console.log(ParkList); //displays your JSON object in the console
     	let parkDivs = ParkList.map((parkDetailObj, i) => 
-       	 <ParkDetailRow name={parkDetailObj.name} address={parkDetailObj.address} phoneNumber={parkDetailObj.phoneNumber} rating={parkDetailObj.rating}/>
+       	 <ParkDetailRow name={parkDetailObj.name} address={parkDetailObj.address} phoneNumber={parkDetailObj.phoneNumber} rating={parkDetailObj.rating} totalRatings = {parkDetailObj.totalRatings}/>
     	);
 		//This saves our HTML representation of the data into the state, which we can call in our render function
 		this.setState({
@@ -75,43 +86,150 @@ export default class NPFinder extends React.Component {
     	}, err => {
      	 // Print the error if there is one.
      	 console.log(err);
-    	});  
+    	});
+		*/
+
+
+		//Fetch the park detail information and photo and save it to park photo
+		let image2 = "/public/bg.jpg"
+		
+		fetch("http://localhost:8081/photos/" + parkInput,
+		{
+			method: "GET"
+		}).then(res => {
+			return res.json();
+		}, err => {
+			console.log(err);
+		}).then(parkImage => {
+			console.log(parkImage);
+			//save the image and park details to a park info box object
+			let parkImg = parkImage.map((imageObj, i) =>
+			(image2 = imageObj.image2loc,
+			<ParkInfoBox imageUrl={imageObj.image1loc} credit={imageObj.image1credit} name = {imageObj.name} phone={imageObj.phoneNumber} rating={imageObj.rating} location={imageObj.address} lat={imageObj.lat} lng={imageObj.lng} website={imageObj.websiteUrl}/>)
+			
+			);
+			//update the state to have the park image
+			this.setState({
+				parkPhoto: parkImg,
+				imageLink: image2
+			})
+			console.log("Reset image Link")
+			console.log(this.state.imageLink)
+
+		}, 
+		err => {
+			console.log(err)
+		});
+
+
+		//Fetch the park detail information and photo and save it to park photo
+		fetch("http://localhost:8081/nearbyParks/" + parkInput,
+		{
+			method: "GET"
+		}).then(res => {
+			return res.json();
+		}, err => {
+			console.log(err);
+		}).then(nearbyParks => {
+			console.log(nearbyParks);
+			//save the image and park details to a park info box object
+			let nearbyPark = nearbyParks.map((parkObj, i) =>
+			<ParkSummary imageUrl={parkObj.image1loc} credit={parkObj.image1credit} name = {parkObj.nearbyPark} rating={parkObj.rating} distance={parkObj.distanceInMiles}/>
+			);
+			//update the state to have the park image
+			this.setState({
+				nearbyParks: nearbyPark
+			})
+			
+
+		}, 
+		err => {
+			console.log(err)
+		});
+
+
+
+
 	}
 	render() {
+		let hStyle = {
+			"text-align": 'center',
+			"text-transform": 'uppercase',
+		};
+
+		console.log("About to reset the background with:")
+		console.log(this.state.imageLink)
+		//console.log(this.props.selectedPark)
 
 		return (
-			<div className="NPFinder">
-				<PageNavbar active="Finder" />
+			
+			<div className="NPFinder" style={{ 	backgroundImage: `url(${this.state.imageLink})`, backgroundSize: 'cover'}}>
+			<PageNavbar active="Finder" />
 
-				<div className="container np-container">
-			      <div className="jumbotron1">
-			        <div className="h5">Get National Park Information</div>
+			<div className="container np-container">
+			  <div className="jumbotron1">
+				<div className="h5">Get National Park Information</div>
 
-			        <div className="years-container">
-			          <div className="dropdown-container">
-			            <select value={this.state.selectedPark} onChange={this.handleChange} className="dropdown" id="parksDropdown">
-			            	<option select value> -- select an option -- </option>
-			            	{this.state.parks}
-			            </select>
-			            <button className="submit-btn" id="decadesSubmitBtn" onClick={this.submitPark}>Submit</button>
-			          </div>
-			        </div>
-			      </div>
-			      <div className="jumbotron2">
-			        <div className="parks-container">
-			          <div className="park">
-			            <div className="header"><strong>Park</strong></div>
-			            <div className="header"><strong>Address</strong></div>
-			            <div className="header"><strong>Phone Number</strong></div>
-			            <div className="header"><strong>Rating</strong></div>
-			          </div>
-			          <div className="parks-container" id="parkResults">
-			            {this.state.parkDetail}
-			          </div>
-			        </div>
-			      </div>
-			    </div>
+				<div className="years-container">
+				  <div className="dropdown-container">
+					<select value={this.state.selectedPark} onChange={this.handleChange} className="dropdown" id="parksDropdown">
+						<option select value> -- select an option -- </option>
+						{this.state.parks}
+					</select>
+					<button className="submit-btn" id="decadesSubmitBtn" onClick={this.submitPark}>Submit</button>
+				  </div>
+				</div>
+			  </div>
+
+			  <table class="upper">
+				<td class="mp-left">
+				<section>
+					
+					
+							<h2 style={hStyle}>NEARBY PARKS</h2>
+							<div className="infobox" id="parkResults" align="center">
+							  {this.state.nearbyParks}
+							</div>
+					    
+					</section> 
+
+				</td>
+				<td class="mp-bordered"></td>
+				<td class="mp-right">
+				<section>
+				  
+				  <h2 style={hStyle}>Selected Park</h2>
+				  		<div className="infobox" id="parkResults" align="center">
+			            	{this.state.parkPhoto}
+			          	</div>
+				  
+				  </section>
+
+				</td>
+
+			  </table>
+			  		
+					
+				
+			  
 			</div>
+		</div>
 		);
 	}
 }
+
+/*
+<div className="jumbotron2">
+				<div className="parks-container">
+				  <div className="park">
+					<div className="header"><strong>Park</strong></div>
+					<div className="header"><strong>Address</strong></div>
+					<div className="header"><strong>Phone Number</strong></div>
+					<div className="header"><strong>Rating</strong></div>
+				  </div>
+				  <div className="parks-container" id="parkResults">
+					{this.state.parkDetail}
+				  </div>
+				</div>
+			  </div>
+			  */
