@@ -22,7 +22,7 @@ export default class ParkInfoBox extends React.Component {
             <tr>
            
             <td>
-            <img src={this.props.imageUrl} alt={this.props.credit}></img>
+            <img align="center" src={this.props.imageUrl} alt={this.props.credit}></img>
             </td>
             </tr>
             <tr>

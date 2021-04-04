@@ -163,23 +163,36 @@ export default class NPFinder extends React.Component {
 				  </div>
 				</div>
 			  </div>
-			  		<section>
-				  <div className="jumbotron2">
+
+			  <table class="upper">
+				<td class="mp-left">
+				<section>
+					
+					
+							<h2 style={hStyle}>NEARBY PARKS</h2>
+							<div className="infobox" id="parkResults" align="center">
+							  {this.state.nearbyParks}
+							</div>
+					    
+					</section> 
+
+				</td>
+				<td class="mp-bordered"></td>
+				<td class="mp-right">
+				<section>
+				  
 				  <h2 style={hStyle}>Selected Park</h2>
-				  		<div className="infobox" id="parkResults" align="right">
+				  		<div className="infobox" id="parkResults" align="center">
 			            	{this.state.parkPhoto}
 			          	</div>
-				  </div>
+				  
 				  </section>
-					<section>
+
+				</td>
+
+			  </table>
+			  		
 					
-				  <div className="jumbotron2">
-				  		<h2 style={hStyle}>NEARBY PARKS</h2>
-				  		<div className="infobox" id="parkResults" align="left">
-			            	{this.state.nearbyParks}
-			          	</div>
-				  </div>    
-				  </section> 
 				
 			  
 			</div>

@@ -50,6 +50,32 @@
   width: 22em;
 }
 
+.parks-container .upper{
+  width: 100%;
+    margin-top: 4px;
+    margin-bottom: 0;
+    border-spacing: 0;
+    border-collapse: separate;
+}
+
+.mp-bordered {
+  border-width: 1px;
+    border-style: solid;
+}
+
+.mp-right {
+  width: 50%;
+  border-color: #cedff2;
+  background: #f5faff9f;
+  align: right
+}
+
+.mp-left {
+  width: 50%;
+  border-color: #cedff2;
+  background: #f5faff9f;
+}
+
 
 .park .header, .parkResults .name, .parkResults .address, .parkResults .phoneNumber, .parkResults .rating, .parkResults .totalRatings {
   flex: 1 0 25%;
