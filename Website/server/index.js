@@ -29,6 +29,8 @@ app.get('/reviews', routes.getReviews);
 
 app.get('/photos/:parkInput', routes.getPhotos);
 
+app.get('/nearbyParks/:parkInput', routes.getNearbyParks);
+
 
 
 app.listen(8081, () => {
