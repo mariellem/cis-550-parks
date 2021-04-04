@@ -119,15 +119,16 @@ function getPhotos(req, res) {
 
 function getNearbyParks(req, res) {
   let inputPark = req.params.parkInput
-  var query = '
-  SELECT p1.name AS nearbyPark, 
-ST_Distance_Sphere( point(myPark.lng, myPark.lat), point(p1.lng, p1.lat))*.000621371192 
-	AS distanceInMiles 
-FROM (SELECT * FROM park_details pd WHERE pd.name='${inputPark}') myPark 
-JOIN park_details p1 ON p1.parkId<>myPark.parkId 
-ORDER BY distanceInMiles ASC 
-LIMIT 3; 
-  '
+  var query = `SELECT p1.name AS nearbyPark, 
+  ST_Distance_Sphere( point(myPark.lng, myPark.lat), point(p1.lng, p1.lat))*.000621371192 
+    AS distanceInMiles, p1.rating,  image1loc, image1credit
+  FROM (SELECT * FROM park_details pd WHERE pd.name='${inputPark}') myPark 
+  JOIN park_details p1 ON p1.parkId<>myPark.parkId 
+  JOIN photos ph on ph.parkId = p1.parkId
+  ORDER BY distanceInMiles ASC 
+  LIMIT 3;`;
+  
+  
   console.log(query);
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);

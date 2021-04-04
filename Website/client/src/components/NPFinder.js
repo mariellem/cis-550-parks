@@ -1,7 +1,8 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
 import ParkDetailRow from './ParkDetailRow';
-import ParkPhotoRow from './ParkPhotoRow';
+import ParkInfoBox from './ParkInfoBox';
+import ParkSummary from './ParkSummary'
 import '../style/NPFinder.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -57,6 +58,7 @@ export default class NPFinder extends React.Component {
 	submitPark() {
 		
 		let parkInput = this.state.selectedPark;
+		/*
 		fetch("http://localhost:8081/parkDetails/" + parkInput,
 		{
 			method: "GET"
@@ -77,7 +79,10 @@ export default class NPFinder extends React.Component {
      	 // Print the error if there is one.
      	 console.log(err);
     	});
-		
+		*/
+
+
+		//Fetch the park detail information and photo and save it to park photo
 		fetch("http://localhost:8081/photos/" + parkInput,
 		{
 			method: "GET"
@@ -87,10 +92,11 @@ export default class NPFinder extends React.Component {
 			console.log(err);
 		}).then(parkImage => {
 			console.log(parkImage);
+			//save the image and park details to a park info box object
 			let parkImg = parkImage.map((imageObj, i) =>
-			<ParkPhotoRow imageUrl={imageObj.image1loc} credit={imageObj.image1credit} name = {imageObj.name} phone={imageObj.phoneNumber} rating={imageObj.rating} location={imageObj.address} lat={imageObj.lat} lng={imageObj.lng} website={imageObj.websiteUrl}/>
+			<ParkInfoBox imageUrl={imageObj.image1loc} credit={imageObj.image1credit} name = {imageObj.name} phone={imageObj.phoneNumber} rating={imageObj.rating} location={imageObj.address} lat={imageObj.lat} lng={imageObj.lng} website={imageObj.websiteUrl}/>
 			);
-
+			//update the state to have the park image
 			this.setState({
 				parkPhoto: parkImg
 			})
@@ -99,6 +105,35 @@ export default class NPFinder extends React.Component {
 		err => {
 			console.log(err)
 		});
+
+
+		//Fetch the park detail information and photo and save it to park photo
+		fetch("http://localhost:8081/nearbyParks/" + parkInput,
+		{
+			method: "GET"
+		}).then(res => {
+			return res.json();
+		}, err => {
+			console.log(err);
+		}).then(nearbyParks => {
+			console.log(nearbyParks);
+			//save the image and park details to a park info box object
+			let nearbyPark = nearbyParks.map((parkObj, i) =>
+			<ParkSummary imageUrl={parkObj.image1loc} credit={parkObj.image1credit} name = {parkObj.nearbyPark} rating={parkObj.rating} distance={parkObj.distanceInMiles}/>
+			);
+			//update the state to have the park image
+			this.setState({
+				nearbyParks: nearbyPark
+			})
+
+		}, 
+		err => {
+			console.log(err)
+		});
+
+
+
+
 	}
 	render() {
 
@@ -125,7 +160,13 @@ export default class NPFinder extends React.Component {
 				  		<div className="infobox" id="parkResults" align="right">
 			            	{this.state.parkPhoto}
 			          	</div>
-				  </div>    
+				  </div>
+
+				  <div className="jumbotron2">
+				  		<div className="infobox" id="parkResults" align="left">
+			            	{this.state.nearbyParks}
+			          	</div>
+				  </div>     
 				
 			  
 			</div>

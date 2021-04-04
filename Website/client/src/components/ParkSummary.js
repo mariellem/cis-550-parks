@@ -8,7 +8,7 @@ export default class ParkPhotoRow extends React.Component {
 
 	render() {
 		return (
-        <table class="infobox">
+            <table class="infobox">
         <tbody>
 			
             <tr>
@@ -25,53 +25,31 @@ export default class ParkPhotoRow extends React.Component {
             <img src={this.props.imageUrl} alt={this.props.credit}></img>
             </td>
             </tr>
-            <tr>
-                <th>
-                    <div>Location</div>
-                </th>
-                <td>
-                    <div>{this.props.location}</div>
-                </td>
-            </tr>
 
             <tr>
                 <th>
-                    <div>Latitude</div>
+                    <div><b>Distance</b></div>
                 </th>
                 <td>
-                    <div>{this.props.lat}</div>
+                    <div>{this.props.rating} miles</div>
                 </td>
-            </tr> 
+            </tr>  
+
 
             <tr>
                 <th>
-                    <div>Longitude</div>
-                </th>
-                <td>
-                    <div>{this.props.lng}</div>
-                </td>
-            </tr> 
-
-            <tr>
-                <th>
-                    <div>Rating</div>
+                    <div><b>Rating</b></div>
                 </th>
                 <td>
                     <div>{this.props.rating}</div>
                 </td>
             </tr>   
 
-            <tr>
-                <th>
-                    <div>Website</div>
-                </th>
-                <td>
-                    <div>{this.props.website}</div>
-                </td>
-            </tr>  
+          
                 
             </tbody>
             </table>
+        
 		);
 	}
 }
