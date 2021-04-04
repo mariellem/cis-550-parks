@@ -9,9 +9,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 export default class NPFinder extends React.Component {
 	constructor(props) {
 		super(props);
+		const queryString= window.location.search
+		let urlParams = new URLSearchParams(queryString)
 
 		this.state = {
-			selectedPark: "",
+			selectedPark: urlParams.get('park'),
 			parks: [],
 			parkDetail: []
 		};
@@ -46,6 +48,8 @@ export default class NPFinder extends React.Component {
 		  // Print the error if there is one.
 		  console.log(err);
 		});
+
+		this.submitPark()
 	}
 
 	handleChange(e) {
@@ -136,6 +140,10 @@ export default class NPFinder extends React.Component {
 
 	}
 	render() {
+		let hStyle = {
+			"text-align": 'center',
+			"text-transform": 'uppercase',
+		};
 
 		return (
 			<div className="NPFinder">
@@ -155,18 +163,23 @@ export default class NPFinder extends React.Component {
 				  </div>
 				</div>
 			  </div>
-			  	
+			  		<section>
 				  <div className="jumbotron2">
+				  <h2 style={hStyle}>Selected Park</h2>
 				  		<div className="infobox" id="parkResults" align="right">
 			            	{this.state.parkPhoto}
 			          	</div>
 				  </div>
-
+				  </section>
+					<section>
+					
 				  <div className="jumbotron2">
+				  		<h2 style={hStyle}>NEARBY PARKS</h2>
 				  		<div className="infobox" id="parkResults" align="left">
 			            	{this.state.nearbyParks}
 			          	</div>
-				  </div>     
+				  </div>    
+				  </section> 
 				
 			  
 			</div>

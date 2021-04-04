@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link } from 'react-router-dom';
 
 export default class ParkPhotoRow extends React.Component {
 	constructor(props) {
@@ -7,6 +8,9 @@ export default class ParkPhotoRow extends React.Component {
 	}
 
 	render() {
+      
+        let redirect = "?park="+this.props.name
+       
 		return (
             <table class="infobox">
         <tbody>
@@ -14,7 +18,8 @@ export default class ParkPhotoRow extends React.Component {
             <tr>
            
             <td>
-                <div className="parkName" align="center"><b>{this.props.name}</b> </div>
+                
+                <div className="parkName" align="center"><b><a href={redirect} target="blank">{this.props.name}</a></b> </div>
                 </td>
             
             </tr>
@@ -31,7 +36,7 @@ export default class ParkPhotoRow extends React.Component {
                     <div><b>Distance</b></div>
                 </th>
                 <td>
-                    <div>{this.props.rating} miles</div>
+                    <div>{Math.round(this.props.distance)} miles</div>
                 </td>
             </tr>  
 

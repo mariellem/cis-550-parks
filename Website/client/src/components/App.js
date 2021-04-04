@@ -9,7 +9,10 @@ import NPFinder from './NPFinder';
 
 export default class App extends React.Component {
 
+	
+
 	render() {
+		let defaultPark = ""
 		return (
 			<div className="App">
 				<Router>
@@ -31,7 +34,7 @@ export default class App extends React.Component {
 						<Route
 							path="/Finder"
 							render={() => (
-								<NPFinder />
+								<NPFinder selectedPark = {defaultPark} />
 							)}
 						/>
 					</Switch>

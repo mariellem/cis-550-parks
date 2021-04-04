@@ -66,7 +66,8 @@ export default class ParkInfoBox extends React.Component {
                     <div>Website</div>
                 </th>
                 <td>
-                    <div>{this.props.website}</div>
+                    <div><a href={this.props.website} target="blank">{this.props.name}</a></div>
+                    
                 </td>
             </tr>  
                 
