@@ -2,7 +2,8 @@ import React from 'react';
 import PageNavbar from './PageNavbar';
 import ParkDetailRow from './ParkDetailRow';
 import ParkInfoBox from './ParkInfoBox';
-import ParkSummary from './ParkSummary'
+import ParkSummary from './ParkSummary';
+import ParkAttendance from './ParkAttendance';
 import '../style/NPFinder.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -122,7 +123,7 @@ export default class NPFinder extends React.Component {
 		});
 
 
-		//Fetch the park detail information and photo and save it to park photo
+		//Fetch the nearby park information
 		fetch("http://localhost:8081/nearbyParks/" + parkInput,
 		{
 			method: "GET"
@@ -132,7 +133,7 @@ export default class NPFinder extends React.Component {
 			console.log(err);
 		}).then(nearbyParks => {
 			console.log(nearbyParks);
-			//save the image and park details to a park info box object
+			//save the image and park details for the nearby parks
 			let nearbyPark = nearbyParks.map((parkObj, i) =>
 			<ParkSummary imageUrl={parkObj.image1loc} credit={parkObj.image1credit} name = {parkObj.nearbyPark} rating={parkObj.rating} distance={parkObj.distanceInMiles}/>
 			);
@@ -141,6 +142,31 @@ export default class NPFinder extends React.Component {
 				nearbyParks: nearbyPark
 			})
 			
+
+		}, 
+		err => {
+			console.log(err)
+		});
+
+
+		//Fetch the park attendance information
+		fetch("http://localhost:8081/parkAttendance/" + parkInput,
+		{
+			method: "GET"
+		}).then(res => {
+			return res.json();
+		}, err => {
+			console.log(err);
+		}).then(parkVisitors => {
+			//save the image and park details to a park info box object
+			let attendance = parkVisitors.map((parkObj, i) =>
+			<ParkAttendance year={parkObj.year} visitors={parkObj.visitors}/>
+			);
+			//update the state to have the park image
+			this.setState({
+				parkAttendance: attendance
+			})
+			console.log(this.state.parkAttendance)
 
 		}, 
 		err => {
@@ -204,7 +230,12 @@ export default class NPFinder extends React.Component {
 			          	</div>
 				  
 				  </section>
-
+				  <section>
+				  <h2 style={hStyle}>Yearly Attendance</h2>
+				  <div className="infobox" id="parkResults" align="center">
+			            	{this.state.parkAttendance}
+			          	</div>
+						  </section>
 				</td>
 
 			  </table>

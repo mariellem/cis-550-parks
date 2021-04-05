@@ -23,7 +23,7 @@ app.get('/allParkDetails', routes.getAllParkDetails);
 
 app.get('/historicalWeather', routes.getHistoricalWeather);
 
-app.get('/parkAttendance', routes.getParkAttendance);
+app.get('/parkAttendance/:parkInput', routes.getParkAttendance);
 
 app.get('/reviews', routes.getReviews);
 

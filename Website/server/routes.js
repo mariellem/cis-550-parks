@@ -76,8 +76,13 @@ function getHistoricalWeather(req, res) {
 
 
 function getParkAttendance(req, res) {
+  inputPark = req.params.parkInput
 	var query = `
-    SELECT * FROM park_attendance LIMIT 50
+    SELECT * FROM park_attendance 
+    where parkId in (
+      SELECT parkId from park_details pd
+      where pd.name = '${inputPark}'
+    ) and year > 2010;
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
