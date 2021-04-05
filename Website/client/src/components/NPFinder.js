@@ -2,7 +2,8 @@ import React from 'react';
 import PageNavbar from './PageNavbar';
 import ParkDetailRow from './ParkDetailRow';
 import ParkInfoBox from './ParkInfoBox';
-import ParkSummary from './ParkSummary'
+import ParkSummary from './ParkSummary';
+import ParkReviewRow from './ParkReviewRow';
 import '../style/NPFinder.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -16,7 +17,8 @@ export default class NPFinder extends React.Component {
 			selectedPark: urlParams.get('park'),
 			imageLink: '/public/bg.jpg',
 			parks: [],
-			parkDetail: []
+			parkDetail: [],
+			parkReviews: []
 		};
 
 		this.submitPark = this.submitPark.bind(this);
@@ -61,7 +63,6 @@ export default class NPFinder extends React.Component {
 		});
 	}
 
-	/* ---- Q3b (Best Genres) ---- */
 	submitPark() {
 		console.log("Submitted the park")
 		console.log(this.state.selectedPark)
@@ -148,6 +149,31 @@ export default class NPFinder extends React.Component {
 		});
 
 
+		//Fetch the park reviews
+		fetch("http://localhost:8081/parkReviews/" + parkInput,
+		{
+			method: "GET"
+		}).then(res => {
+			return res.json();
+		}, err => {
+			console.log(err);
+		}).then(parkReviews => {
+			console.log(parkReviews);
+			//save the image and park details to a park info box object
+			let parkReview = parkReviews.map((parkRevObj, i) =>
+			<ParkReviewRow date = {parkRevObj.reviewDate} rating={parkRevObj.rating} review={parkRevObj.review}/>
+			);
+			//update the state to have the park image
+			this.setState({
+				parkReviews: parkReview
+			})
+			
+
+		}, 
+		err => {
+			console.log(err)
+		});
+
 
 
 	}
@@ -208,10 +234,18 @@ export default class NPFinder extends React.Component {
 				</td>
 
 			  </table>
-			  		
-					
-				
-			  
+
+			  <div className="jumbotron2">
+				<div className="parks-container">
+				  <div className="park">
+					<div className="header"><strong>Rating</strong></div>
+					<div className="header"><strong>Review</strong></div>
+				  </div>
+				  <div className="parks-container" id="parkReviews">
+					{this.state.parkReviews}
+				  </div>
+				</div>
+			  </div>			  
 			</div>
 		</div>
 		);

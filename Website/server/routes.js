@@ -139,7 +139,23 @@ function getNearbyParks(req, res) {
 
 }
 
-
+function getParkReviews(req, res) {
+  var inputPark = req.params.parkInput;
+  var query = `
+    SELECT p.name, r.rating, r.text AS review, from_unixtime(r.unixTime) AS reviewDate 
+    FROM reviews r JOIN places p ON p.placeId=r.placeId 
+    WHERE p.name='${inputPark}'
+    ORDER BY r.unixTime DESC
+    LIMIT 5;
+  `;
+  connection.query(query, function(err, rows, fields){
+    if (err)console.log(err);
+    else {
+      console.log(rows);
+      res.json(rows);
+    }
+  });  
+};
 
 
 // The exported functions, which can be accessed in index.js.
@@ -152,5 +168,6 @@ module.exports = {
   getParkAttendance: getParkAttendance,
   getReviews: getReviews,
   getPhotos:getPhotos,
-  getNearbyParks:getNearbyParks
+  getNearbyParks:getNearbyParks,
+  getParkReviews:getParkReviews
 }

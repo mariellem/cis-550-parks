@@ -28,6 +28,15 @@
   padding: 0 10px;
 }
 
+.parks-container .parkReviews {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: left;
+  height: 40px;
+  padding: 0 10px;
+}
+
+
 .parks-container .parkPhoto {
   display: flex;
   flex-flow: row nowrap;
@@ -78,5 +87,12 @@
 
 
 .park .header, .parkResults .name, .parkResults .address, .parkResults .phoneNumber, .parkResults .rating, .parkResults .totalRatings {
+  flex: 1 0 25%;
+}
+
+.park .header, .parkReviews .rating, .parkReviews .review{
+  flex: 1 0 25%;
+}
+.parkReviews .rating, .parkReviews .review{
   flex: 1 0 25%;
 }
