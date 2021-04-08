@@ -8,21 +8,22 @@ export default class ParkInfoBox extends React.Component {
 
 	render() {
 		return (
+        
         <table class="infobox">
+        
         <tbody>
 			
-            <tr>
-           
-            <td>
-                <div className="parkName" align="center"><b>{this.props.name}</b> </div>
-                </td>
-            
-            </tr>
+          <tr>
+              <td colspan="2">
+              <div class="infobox-title">{this.props.name}</div>
+              </td>
+          </tr>
             
             <tr>
            
-            <td>
-            <img align="center" src={this.props.imageUrl} alt={this.props.credit}></img>
+            <td colspan="2">
+            
+            <img class="center" src={this.props.imageUrl} alt={this.props.credit} height="100" width="120"></img>
             </td>
             </tr>
             <tr>

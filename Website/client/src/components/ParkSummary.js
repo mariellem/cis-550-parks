@@ -17,17 +17,17 @@ export default class ParkPhotoRow extends React.Component {
 			
             <tr>
            
-            <td>
+            <td colspan="2">
                 
-                <div className="parkName" align="center"><b><a href={redirect} target="blank">{this.props.name}</a></b> </div>
+                <div align="center"><b><a href={redirect} target="blank">{this.props.name}</a></b> </div>
                 </td>
             
             </tr>
             
             <tr>
            
-            <td>
-            <img align="center" src={this.props.imageUrl} alt={this.props.credit}></img>
+            <td colspan="2">
+            <img class="center" src={this.props.imageUrl} alt={this.props.credit} width="100px" height="120px"></img>
             </td>
             </tr>
 

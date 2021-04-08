@@ -105,8 +105,8 @@ export default class NPFinder extends React.Component {
 			console.log(parkImage);
 			//save the image and park details to a park info box object
 			let parkImg = parkImage.map((imageObj, i) =>
-			(image2 = imageObj.image2loc,
-			<ParkInfoBox imageUrl={imageObj.image1loc} credit={imageObj.image1credit} name = {imageObj.name} phone={imageObj.phoneNumber} rating={imageObj.rating} location={imageObj.address} lat={imageObj.lat} lng={imageObj.lng} website={imageObj.websiteUrl}/>)
+			(image2 = imageObj.image1loc,
+			<ParkInfoBox imageUrl={imageObj.image2loc} credit={imageObj.image2credit} name = {imageObj.name} phone={imageObj.phoneNumber} rating={imageObj.rating} location={imageObj.address} lat={imageObj.lat} lng={imageObj.lng} website={imageObj.websiteUrl}/>)
 			
 			);
 			//update the state to have the park image

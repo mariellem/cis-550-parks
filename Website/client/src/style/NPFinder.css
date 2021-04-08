@@ -76,6 +76,31 @@
   background: #f5faff9f;
 }
 
+.infobox caption, .infobox-title {
+    padding: 0.2em;
+}
+
+.infobox .infobox-above, .infobox caption, .infobox-title {
+    font-size: 125%;
+    font-weight: bold;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+
+}
+
+caption {
+    display: table-caption;
+    text-align: -webkit-center;
+}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
 
 .park .header, .parkResults .name, .parkResults .address, .parkResults .phoneNumber, .parkResults .rating, .parkResults .totalRatings {
   flex: 1 0 25%;

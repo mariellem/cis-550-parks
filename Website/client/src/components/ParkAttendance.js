@@ -12,18 +12,10 @@ export default class ParkAttendance extends React.Component {
             <tbody>
                 
                 <tr>
-               
-                <td>
-                    <div className="parkName" align="center"><b></b> </div>
-                    </td>
-                
-                </tr>
-                
-                <tr>
-                    <th>
+                    <th class="mp-left">
                         <div>{this.props.year}</div>
                     </th>
-                    <td>
+                    <td class="mp-right">
                         <div>{this.props.visitors}</div>
                     </td>
                 </tr>
