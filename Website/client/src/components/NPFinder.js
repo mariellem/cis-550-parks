@@ -69,7 +69,7 @@ export default class NPFinder extends React.Component {
 		console.log(this.state.selectedPark)
 		console.log(typeof(this.state.selectedPark))
 		let parkInput = this.state.selectedPark;
-		if (parkInput.localeCompare("true") == 0) {
+		if (parkInput == "true" || parkInput == null) {
 			this.setState({
 				opactiy: 0
 			})
