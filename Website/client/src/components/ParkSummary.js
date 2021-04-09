@@ -10,6 +10,7 @@ export default class ParkPhotoRow extends React.Component {
 	render() {
       
         let redirect = "?park="+this.props.name
+        
        
 		return (
             <table class="infobox">

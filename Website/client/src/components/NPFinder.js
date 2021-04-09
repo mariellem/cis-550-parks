@@ -17,7 +17,8 @@ export default class NPFinder extends React.Component {
 			selectedPark: urlParams.get('park'),
 			imageLink: '/public/bg.jpg',
 			parks: [],
-			parkDetail: []
+			parkDetail: [],
+			opacity: 0
 		};
 
 		this.submitPark = this.submitPark.bind(this);
@@ -66,7 +67,19 @@ export default class NPFinder extends React.Component {
 	submitPark() {
 		console.log("Submitted the park")
 		console.log(this.state.selectedPark)
+		console.log(typeof(this.state.selectedPark))
 		let parkInput = this.state.selectedPark;
+		if (parkInput.localeCompare("true") == 0) {
+			this.setState({
+				opactiy: 0
+			})
+		} else {
+			this.setState({
+				opacity: 1
+			})
+		}
+		console.log("opacity is:")
+		console.log(this.state.opacity)
 		/*
 		fetch("http://localhost:8081/parkDetails/" + parkInput,
 		{
@@ -178,14 +191,17 @@ export default class NPFinder extends React.Component {
 
 	}
 	render() {
+		//console.log("Selected park is:")
+		//console.log(this.state.selectedPark)
 		let hStyle = {
 			"text-align": 'center',
 			"text-transform": 'uppercase',
+			"opacity":this.state.opacity,
 		};
-
-		console.log("About to reset the background with:")
-		console.log(this.state.imageLink)
-		//console.log(this.props.selectedPark)
+		let tStyle = {
+			"opacity":this.state.opacity,
+		};
+		
 
 		return (
 			
@@ -207,7 +223,7 @@ export default class NPFinder extends React.Component {
 				</div>
 			  </div>
 
-			  <table class="upper">
+			  <table style ={tStyle} class="upper">
 				<td class="mp-left">
 				<section>
 					
