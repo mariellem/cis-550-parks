@@ -1,10 +1,18 @@
-.jumbotron1 {
-  background:rgba(200, 200, 200, 0.0);
+.NPFinder {
+  padding: auto;
 }
 
-.jumbotron2 {
+.backgroundClear {
+  background:rgba(0.0, 0.0, 0.0, 0.0);
+}
+
+.backgroundGray {
   background:rgba(200, 200, 200, 0.8);
 }
+
+
+
+
 
 .parks-container {
   display: flex;
@@ -12,18 +20,34 @@
   margin-top: 10px;
 }
 
-.parks-container .park {
+/* .parks-container .park {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
   height: 40px;
   padding: 0 10px;
-}
+} */
 
-.parks-container .parkResults {
+/* .parks-container .parkResults {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+  height: 40px;
+  padding: 0 10px;
+} */
+
+/* .parks-container .parkReviews {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: left;
+  height: 40px;
+  padding: 0 10px;
+} */
+
+.parkReviews {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: left;
   height: 40px;
   padding: 0 10px;
 }
@@ -103,5 +127,12 @@ caption {
 
 
 .park .header, .parkResults .name, .parkResults .address, .parkResults .phoneNumber, .parkResults .rating, .parkResults .totalRatings {
+  flex: 1 0 25%;
+}
+
+.park .header, .parkReviews .rating, .parkReviews .review{
+  flex: 1 0 25%;
+}
+.park .header, .parkReviews .rating, .parkReviews .review{
   flex: 1 0 25%;
 }

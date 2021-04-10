@@ -2,8 +2,10 @@ import React from 'react';
 import PageNavbar from './PageNavbar';
 import ParkDetailRow from './ParkDetailRow';
 import ParkInfoBox from './ParkInfoBox';
-import ParkSummary from './ParkSummary';
+import ParkSummary from './ParkSummary'
 import ParkAttendance from './ParkAttendance';
+import ParkReviewRow from './ParkReviewRow';
+import ParkWeatherRow from './ParkWeatherRow';
 import '../style/NPFinder.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -18,6 +20,8 @@ export default class NPFinder extends React.Component {
 			imageLink: '/public/bg.jpg',
 			parks: [],
 			parkDetail: [],
+			parkReviews: [],
+			park5DayWeathers: []
 			opacity: 0
 		};
 
@@ -63,7 +67,6 @@ export default class NPFinder extends React.Component {
 		});
 	}
 
-	/* ---- Q3b (Best Genres) ---- */
 	submitPark() {
 		console.log("Submitted the park")
 		console.log(this.state.selectedPark)
@@ -162,6 +165,25 @@ export default class NPFinder extends React.Component {
 		});
 
 
+		//Fetch the park reviews
+		fetch("http://localhost:8081/parkReviews/" + parkInput,
+		{
+			method: "GET"
+		}).then(res => {
+			return res.json();
+		}, err => {
+			console.log(err);
+		}).then(parkReviews => {
+			console.log(parkReviews);
+			//save the image and park details to a park info box object
+			let parkReview = parkReviews.map((parkRevObj, i) =>
+			<ParkReviewRow date = {parkRevObj.reviewDate} rating={parkRevObj.rating} review={parkRevObj.review}/>
+			);
+			//update the state to have the park image
+			this.setState({
+				parkReviews: parkReview
+			})
+			
 		//Fetch the park attendance information
 		fetch("http://localhost:8081/parkAttendance/" + parkInput,
 		{
@@ -187,6 +209,59 @@ export default class NPFinder extends React.Component {
 		});
 
 
+		}, 
+		err => {
+			console.log(err)
+		});
+
+				//Fetch the park reviews
+		fetch("http://localhost:8081/parkReviews/" + parkInput,
+		{
+			method: "GET"
+		}).then(res => {
+			return res.json();
+		}, err => {
+			console.log(err);
+		}).then(parkReviews => {
+			console.log(parkReviews);
+			//save the image and park details to a park info box object
+			let parkReview = parkReviews.map((parkRevObj, i) =>
+			<ParkReviewRow date = {parkRevObj.reviewDate} rating={parkRevObj.rating} review={parkRevObj.review}/>
+			);
+			//update the state to have the park image
+			this.setState({
+				parkReviews: parkReview
+			})
+			
+
+		}, 
+		err => {
+			console.log(err)
+		});
+
+		// Fetch the park 5 day weather
+		fetch("http://localhost:8081/park5DayWeather/" + parkInput,
+		{
+			method: "GET"
+		}).then(res => {
+			return res.json();
+		}, err => {
+			console.log(err);
+		}).then(park5DayWeathers => {
+			console.log(park5DayWeathers);
+			let park5DW = park5DayWeathers.map((park5DWObj, i) =>
+			<ParkWeatherRow mon = {park5DWObj.mon} dt={park5DWObj.dt} minTemp={park5DWObj.minTemp} maxTemp={park5DWObj.maxTemp} aveTemp={park5DWObj.aveTemp}/>
+			);
+			this.setState({
+				park5DayWeathers: park5DW
+			})
+			
+
+		}, 
+		err => {
+			console.log(err)
+		});
+
 
 
 	}
@@ -208,21 +283,22 @@ export default class NPFinder extends React.Component {
 			<div className="NPFinder" style={{ 	backgroundImage: `url(${this.state.imageLink})`, backgroundSize: 'cover'}}>
 			<PageNavbar active="Finder" />
 
-			<div className="container np-container">
-			  <div className="jumbotron1">
+			<div className="container">
+			  <div className="backgroundClear">
 				<div className="h5">Get National Park Information</div>
 
-				<div className="years-container">
 				  <div className="dropdown-container">
 					<select value={this.state.selectedPark} onChange={this.handleChange} className="dropdown" id="parksDropdown">
 						<option select value> -- select an option -- </option>
 						{this.state.parks}
 					</select>
-					<button className="submit-btn" id="decadesSubmitBtn" onClick={this.submitPark}>Submit</button>
+					<button className="submit-btn" id="parkSubmitBtn" onClick={this.submitPark}>Submit</button>
 				  </div>
-				</div>
 			  </div>
 
+			  <table class="upper">
+			  <table class="upper">
+				  <tr>
 			  <table style ={tStyle} class="upper">
 				<td class="mp-left">
 				<section>
@@ -253,30 +329,67 @@ export default class NPFinder extends React.Component {
 			          	</div>
 						  </section>
 				</td>
+				</tr>
 
+				<tr><td colspan="3">
+					<section className="backgroundGray">
+
+						<table>
+							<tr>
+								<td>
+									<div className="header"><strong>Reviews</strong></div>
+								</td>
+								
+								</tr>
+							{this.state.parkReviews}
+						</table>
+
+					</section>
+					</td></tr>
+
+					<tr><td colspan="3">
+					<section className="backgroundGray">
+					<div>5 Day Historical Weather Forcast</div>						
+					<table>
+						<tr>
+    						<td>
+       						<div className="header"><strong>Date</strong></div>
+   							</td>
+    						<td>
+        						<div className="header"><strong>Min Temp</strong></div>
+ 						    </td>
+    						<td>
+        						<div className="header"><strong>Ave Temp</strong></div>
+    						</td>
+    						<td>
+        						<div className="header"><strong>Max Temp</strong></div>
+    						</td>
+    
+    						</tr>
+						{this.state.park5DayWeathers}
+						</table>
+						</section>
+						</td></tr>
 			  </table>
-			  		
-					
-				
-			  
+
 			</div>
 		</div>
 		);
 	}
 }
 
-/*
-<div className="jumbotron2">
-				<div className="parks-container">
-				  <div className="park">
-					<div className="header"><strong>Park</strong></div>
-					<div className="header"><strong>Address</strong></div>
-					<div className="header"><strong>Phone Number</strong></div>
-					<div className="header"><strong>Rating</strong></div>
-				  </div>
-				  <div className="parks-container" id="parkResults">
-					{this.state.parkDetail}
-				  </div>
-				</div>
-			  </div>
-			  */
+
+{/* <section>
+
+<div className="backgroundGray">
+	<div className="">
+	  <div className="park">
+		<div className="header"><strong>Reviews</strong></div>
+	  </div>
+	  <div className="parks-container" id="parkReviews">
+		{this.state.parkReviews}
+	  </div>
+	</div>
+  </div>			  
+
+</section> */}

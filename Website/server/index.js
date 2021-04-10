@@ -31,7 +31,9 @@ app.get('/photos/:parkInput', routes.getPhotos);
 
 app.get('/nearbyParks/:parkInput', routes.getNearbyParks);
 
+app.get('/parkReviews/:parkInput', routes.getParkReviews);
 
+app.get('/park5DayWeather/:parkInput', routes.getPark5DayWeather);
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);

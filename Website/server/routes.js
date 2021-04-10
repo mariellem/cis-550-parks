@@ -144,7 +144,49 @@ function getNearbyParks(req, res) {
 
 }
 
+function getParkReviews(req, res) {
+  var inputPark = req.params.parkInput;
+  var query = `
+    SELECT p.name, r.rating, r.text AS review, from_unixtime(r.unixTime) AS reviewDate 
+    FROM reviews r JOIN places p ON p.placeId=r.placeId 
+    WHERE p.name='${inputPark}'
+    ORDER BY r.unixTime DESC
+    LIMIT 5;
+  `;
+  connection.query(query, function(err, rows, fields){
+    if (err)console.log(err);
+    else {
+      console.log(rows);
+      res.json(rows);
+    }
+  });  
+};
 
+function getPark5DayWeather(req, res) {
+  var inputPark = req.params.parkInput;
+  var query = `
+    SELECT p.name,  AVG(hw.maxTempF) as maxTemp, AVG(hw.mintempF) as minTemp, AVG(hw.avgtempF) as aveTemp, MONTH(hw.date) as mon, DAY(hw.date) as dt
+    FROM historical_weather hw JOIN places p JOIN park_details pd ON p.placeId = pd.placeId AND pd.lat = hw.lat AND pd.lng = hw.lng 
+    WHERE p.name = '${inputPark}' AND 
+    (
+      MONTH(hw.date) = MONTH(CURRENT_DATE()) AND DAY(hw.date) = DAY(CURRENT_DATE()) OR
+      MONTH(hw.date) = MONTH(DATE_ADD(CURRENT_DATE(), INTERVAL 1 DAY)) AND DAY(hw.date) = DAY(DATE_ADD(CURRENT_DATE(), INTERVAL 1 DAY)) OR
+      MONTH(hw.date) = MONTH(DATE_ADD(CURRENT_DATE(), INTERVAL 2 DAY)) AND DAY(hw.date) = DAY(DATE_ADD(CURRENT_DATE(), INTERVAL 2 DAY)) OR
+      MONTH(hw.date) = MONTH(DATE_ADD(CURRENT_DATE(), INTERVAL 3 DAY)) AND DAY(hw.date) = DAY(DATE_ADD(CURRENT_DATE(), INTERVAL 3 DAY)) OR
+      MONTH(hw.date) = MONTH(DATE_ADD(CURRENT_DATE(), INTERVAL 4 DAY)) AND DAY(hw.date) = DAY(DATE_ADD(CURRENT_DATE(), INTERVAL 4 DAY))
+    )
+    GROUP BY DAY(hw.date)
+    ORDER BY mon, dt
+    ;
+  `;
+  connection.query(query, function(err, rows, fields){
+    if (err)console.log(err);
+    else {
+      console.log(rows);
+      res.json(rows);
+    }
+  });  
+};
 
 
 // The exported functions, which can be accessed in index.js.
@@ -157,5 +199,7 @@ module.exports = {
   getParkAttendance: getParkAttendance,
   getReviews: getReviews,
   getPhotos:getPhotos,
-  getNearbyParks:getNearbyParks
+  getNearbyParks:getNearbyParks,
+  getParkReviews:getParkReviews,
+  getPark5DayWeather:getPark5DayWeather
 }
