@@ -188,6 +188,44 @@ function getPark5DayWeather(req, res) {
   });  
 };
 
+function getMonthNames(req, res) {
+	var query = `
+    SELECT DISTINCT Month(hw.date) as mo_num, 
+      MONTHNAME(STR_TO_DATE(Month(hw.date),'%m')) AS month 
+      FROM historical_weather hw;
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
+function getBestParkTempByMonth(req, res) {
+  var inputMonth = req.params.monthInput;
+  var query = `
+    SELECT w.lat, w.lng, pd.name, p.state, DATE_FORMAT(w.date,'%M') AS month, AVG(w.maxTempF) AS high, 
+      AVG(w.mintempF) AS low, AVG (w.avgtempF) AS average, AVG(w.totalSnow_cm) AS snowfall, AVG(w.sunHour) AS sunHours, AVG(w.uvIndex) AS uvIndex 
+    FROM historical_weather w 
+    JOIN park_details pd ON w.lat=pd.lat AND w.lng=pd.lng 
+    JOIN places p ON p.placeId = pd.placeId 
+    WHERE MONTH(w.date) = ${inputMonth}
+    GROUP BY w.lat, w.lng, MONTHNAME(w.date)
+    HAVING AVG(w.avgTempF) >=50 AND AVG(w.avgTempF) <=55
+    ORDER BY pd.name, w.date;
+  `;
+  connection.query(query, function(err, rows, fields){
+    if (err)console.log(err);
+    else {
+      console.log(rows);
+      res.json(rows);
+    }
+  });  
+};
+
+
+
 
 // The exported functions, which can be accessed in index.js.
 module.exports = {
@@ -201,5 +239,7 @@ module.exports = {
   getPhotos:getPhotos,
   getNearbyParks:getNearbyParks,
   getParkReviews:getParkReviews,
-  getPark5DayWeather:getPark5DayWeather
+  getPark5DayWeather:getPark5DayWeather,
+  getMonthNames:getMonthNames,
+  getBestParkTempByMonth:getBestParkTempByMonth
 }
