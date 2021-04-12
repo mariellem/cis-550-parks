@@ -298,10 +298,11 @@ export default class NPFinder extends React.Component {
 				  
 				  </section>
 				  <section>
-				  <h2 style={hStyle}>Yearly Attendance</h2>
-				  <div className="infobox" id="parkResults" align="center">
+				  
+				  <table className="attendancetable" align="center">
+				  <th colspan="3" style={hStyle}>Yearly Attendance</th>
 			            	{this.state.parkAttendance}
-			          	</div>
+			          	</table>
 						  </section>
 				</td>
 				<tr vertical-align="top">
@@ -317,7 +318,7 @@ export default class NPFinder extends React.Component {
         						<div className="temptableheader"><strong>Min Temp <span>&#730;</span>F</strong></div>
  						    </th>
     						<th>
-        						<div className="temptableheader"><strong>Ave Temp <span>&#730;</span>F</strong></div>
+        						<div className="temptableheader"><strong>Avg Temp <span>&#730;</span>F</strong></div>
     						</th>
     						<th>
         						<div className="temptableheader"><strong>Max Temp <span>&#730;</span>F</strong></div>

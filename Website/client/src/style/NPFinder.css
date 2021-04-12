@@ -137,7 +137,7 @@ caption {
   flex: 1 0 25%;
 }
 
-.temptable{
+.temptable, .attendancetable{
   text-align: center;
   padding: 100px;
   border: 1px solid #ddd;
