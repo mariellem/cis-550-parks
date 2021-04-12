@@ -4,15 +4,15 @@ Group Project
 
 <h1> National Parks & Trails Project </h1>
 
-<h1>Brainstorming </h2>
+
+<h2> Quick Start </h2>
+To access the project website, run `npm install` from the Website folder. Then, in separate command line instances, run `npm start` in both the client and server folders. This will load the site in your browser. 
 
 <h2>Data Sources </h2>
 
 - National Parks Services Datasets (NPS)
   - National Parks API: https://www.nps.gov/subjects/developer/api-documentation.htm
 
-- ~~National Oceanic and Atmospheric Administration (NOAA)~~
-- ~~Yelp (API)~~
 
 - Google Maps (API)
   - (BR): I've used this before, did some looking into it and could very easily pull in all the park data into a CSV and/or JSON file, api response for rocky mountain ehre: https://drive.google.com/file/d/1eSyY1cdmYMKO8bWxuvmKMTkSdH7j3zKP/view?usp=sharing
@@ -23,8 +23,7 @@ Group Project
   - PW: 550Project!
   - Trial API Key:  10fbca6b178e4fafb0d165822210502
 
-- Scrape (if needed)
-  - Hiking Project (REI)
+- Scrape
   - AllTrails 
 
 
@@ -60,19 +59,4 @@ Group Project
   - Search
   - Dropdown list of all parks by state 
 
-<h3> Stretch </h3>
 
-<b> Early Site improvements </b>
-
-- Page with parks by state on a map
-- Include National Historic and other parks
-
-
-<b> Addtl Misc ideas </b>
-
-- Hike recommendation system
-  - Ex: recommend a hike to a User based on User difficulty preferences, current location, current weather, and ratings 
-- Road trip planner
-- ~~National Park Passport~~
-  - ~~"Stamp" by geolocation when user visits a National Park~~
-  
