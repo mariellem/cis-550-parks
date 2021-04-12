@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import NPFinder from './NPFinder';
+import Recommendations from './ParkRecommendations';
 
 export default class App extends React.Component {
 
@@ -37,6 +38,12 @@ export default class App extends React.Component {
 								<NPFinder selectedPark = {defaultPark} />
 							)}
 						/>
+						<Route
+							path="/Recommendations"
+							render={() => (
+								<Recommendations />
+						)}
+					/>
 					</Switch>
 				</Router>
 			</div>
