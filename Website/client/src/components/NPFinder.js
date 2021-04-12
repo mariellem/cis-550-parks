@@ -274,7 +274,7 @@ export default class NPFinder extends React.Component {
 				</div>
 			  </div>
 
-			  <table style ={tStyle} class="upper">
+			  <table style ={tStyle} class="upper" >
 				<td class="mp-left">
 				<section>
 					
@@ -304,24 +304,24 @@ export default class NPFinder extends React.Component {
 			          	</div>
 						  </section>
 				</td>
-				<tr>
-					<td>
-					<section className="backgroundGray">
-					<div>5 Day Historical Weather Forcast</div>						
-					<table>
+				<tr vertical-align="top">
+					<td >
+					<section className="backgroundBlue" align="center">
+					<div><span>&#9788;</span> 5 Day Historical Weather Forcast <span>&#9788;</span></div>						
+					<table className="temptable" align="center">
 						<tr>
-    						<td>
-       						<div className="header"><strong>Date</strong></div>
-   							</td>
-    						<td>
-        						<div className="header"><strong>Min Temp</strong></div>
- 						    </td>
-    						<td>
-        						<div className="header"><strong>Ave Temp</strong></div>
-    						</td>
-    						<td>
-        						<div className="header"><strong>Max Temp</strong></div>
-    						</td>
+    						<th>
+       						<div className="temptableheader"><strong>Date</strong></div>
+   							</th>
+    						<th>
+        						<div className="temptableheader"><strong>Min Temp <span>&#730;</span>F</strong></div>
+ 						    </th>
+    						<th>
+        						<div className="temptableheader"><strong>Ave Temp <span>&#730;</span>F</strong></div>
+    						</th>
+    						<th>
+        						<div className="temptableheader"><strong>Max Temp <span>&#730;</span>F</strong></div>
+    						</th>
     
     						</tr>
 						{this.state.park5DayWeathers}

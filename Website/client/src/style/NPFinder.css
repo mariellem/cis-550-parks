@@ -136,3 +136,20 @@ caption {
 .park .header, .parkReviews .rating, .parkReviews .review{
   flex: 1 0 25%;
 }
+
+.temptable{
+  text-align: center;
+  padding: 100px;
+  border: 1px solid #ddd;
+  
+}
+
+.temptableheader{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.backgroundBlue {
+  vertical-align: top;
+  background:rgba(49, 173, 211, 0.5);
+}
