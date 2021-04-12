@@ -1,15 +1,57 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
 import WeatherDetailRow from './WeatherDetailRow';
-import ParkInfoBox from './ParkInfoBox';
-import ParkSummary from './ParkSummary';
-import ParkAttendance from './ParkAttendance';
-import ParkReviewRow from './ParkReviewRow';
-import ParkWeatherRow from './ParkWeatherRow';
 import '../style/NPFinder.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default class NPFinder extends React.Component {
+// const map = new window.google.maps
+class GoogleMap extends React.Component {
+	componentDidMount() {
+	  if (!window.google || !window.google.maps) {
+		const { googleKey } = this.props;
+		// require is not working inside stackoverflow snippets
+		// we are using a cdn for scriptjs, you can use npm
+		const $script = require(`scriptjs`);
+		$script(
+		  `https://maps.googleapis.com/maps/api/js?key=${googleKey}`,
+		  this.handleGoogleLoad
+		);
+	  }
+	}
+  
+	componentDidUpdate(prevProps) {
+	  const { position } = this.props;
+	  if (prevProps.position !== position) {
+		this.map && this.map.setCenter(position);
+		this.marker && this.marker.setPosition(position);
+	  }
+	}
+  
+	handleGoogleLoad = () => {
+	  const { position } = this.props;
+	  this.map = new window.google.maps.Map(this.mapRef, {
+		scaleControl: true,
+		center: null,
+		zoom: 5
+	  });
+	  for (var i = 0; i < position.length; i++) {
+		console.log("value");
+	  }
+	  this.marker = new window.google.maps.Marker({
+		map: this.map,
+		position: position
+	  });
+  
+	  this.map.setCenter(position);
+	  this.marker.setPosition(position);
+	};
+  
+	render() {
+	  return <div style={{ height: "350px" }} ref={ref => (this.mapRef = ref)} />;
+	}
+  }
+  
+export default class ParkRecommendations extends React.Component {
 	constructor(props) {
 		super(props);
 		const queryString= window.location.search
@@ -20,16 +62,33 @@ export default class NPFinder extends React.Component {
 			imageLink: '/public/bg.jpg',
 			months: [],
 			weatherDetail: [],
-			parkReviews: [],
-			park5DayWeathers: [],
+			latitudes: [0],
+			longitudes: [0],
 			opacity: 0
 		};
+		// this.loadScript = this.loadScript.bind(this);
 
 		this.submitMonth = this.submitMonth.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
 
+	// onInputChange = ({ target }) => {
+	// 	this.setState({ [target.name]: target.value });
+	//   };
+	// state = { lat: 40.741895, lng: -73.989308, googleKey: "" };
+
+	// loadScript(){
+
+	// 	const API_KEY = "AIzaSyDIVLDtctP_dXPybzkrHX0yxGnt2yGm7BQ";		//process.env.REACT_APP_API_KEY;
+	// 	const url = "https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places";
+		
+	// 	const s = document.createElement("script");
+	// 	s.src=url;
+	// 	document.head.appendChild(s);
+	// }
+
 	componentDidMount() {
+		// this.loadScript();
 
 		// Send an HTTP request to the server.
 		fetch("http://localhost:8081/monthNames",
@@ -67,11 +126,10 @@ export default class NPFinder extends React.Component {
 		});
 	}
 
-	/* ---- Q3b (Best Genres) ---- */
 	submitMonth() {
 		console.log("Submitted the month")
 		console.log(this.state.selectedMonth)
-		console.log(typeof(this.state.selectedMonth))
+		// console.log(typeof(this.state.selectedMonth))
 		let monthInput = this.state.selectedMonth;
 		if (monthInput == "true" || monthInput == null) {
 			this.setState({
@@ -82,11 +140,12 @@ export default class NPFinder extends React.Component {
 				opacity: 1
 			})
 		}
-		console.log("opacity is:")
-		console.log(this.state.opacity)
+		// console.log("opacity is:")
+		// console.log(this.state.opacity)
 		
 		//| lat     | lng      | name    | state | month    | high  | low    | average     | snowfall    | sunHours           | uvIndex |
-
+		var latArray = [];
+		var lngArray = [];
 		fetch("http://localhost:8081/recommendations/" + monthInput,
 		{
 			method: "GET"
@@ -96,23 +155,31 @@ export default class NPFinder extends React.Component {
 			console.log(err);
 		}).then(weatherList => {
 			console.log(weatherList); //displays your JSON object in the console
-
+			// console.log(weatherList[0].lat);
+			for (var i = 0; i < weatherList.length; i++) {
+				latArray.push(weatherList[i].lat);
+				lngArray.push(weatherList[i].lng);
+			}
+			for (var j = 0; j < latArray.length; j++) {
+				console.log(latArray[j]);
+			  }
     	let weatherDivs = weatherList.map((weatherDetailObj, i) => 
-			<WeatherDetailRow name={weatherDetailObj.name} 
-			lat={weatherDetailObj.lat} 
-			lng={weatherDetailObj.lng} 
-			state={weatherDetailObj.state} 
-			high={weatherDetailObj.high} 
-			low={weatherDetailObj.low} 
-			average={weatherDetailObj.average} 
-			sunHours={weatherDetailObj.sunHours} 
-			snowfall={weatherDetailObj.snowfall} 
-			uvIndex={weatherDetailObj.uvIndex} 
-			month = {weatherDetailObj.month}/>
+			<WeatherDetailRow 
+				name={weatherDetailObj.name} 
+				state={weatherDetailObj.state} 
+				high={weatherDetailObj.high} 
+				low={weatherDetailObj.low} 
+				average={weatherDetailObj.average} 
+				sunHours={weatherDetailObj.sunHours} 
+				snowfall={weatherDetailObj.snowfall} 
+				uvIndex={weatherDetailObj.uvIndex} 
+				month = {weatherDetailObj.month}/>
     	);
 		//This saves our HTML representation of the data into the state, which we can call in our render function
 		this.setState({
-			weatherDetail: weatherDivs
+			weatherDetail: weatherDivs,
+			latitudes: latArray,
+			longitudes: lngArray
 		});
     	}, err => {
      	 // Print the error if there is one.
@@ -121,62 +188,6 @@ export default class NPFinder extends React.Component {
 		
 
 
-		//Fetch the park detail information and photo and save it to park photo
-		// let image2 = "/public/bg.jpg"
-		
-		// fetch("http://localhost:8081/photos/" + monthInput,
-		// {
-		// 	method: "GET"
-		// }).then(res => {
-		// 	return res.json();
-		// }, err => {
-		// 	console.log(err);
-		// }).then(parkImage => {
-		// 	console.log(parkImage);
-		// 	//save the image and park details to a park info box object
-		// 	let parkImg = parkImage.map((imageObj, i) =>
-		// 	(image2 = imageObj.image1loc,
-		// 	<ParkInfoBox imageUrl={imageObj.image2loc} credit={imageObj.image2credit} name = {imageObj.name} phone={imageObj.phoneNumber} rating={imageObj.rating} location={imageObj.address} lat={imageObj.lat} lng={imageObj.lng} website={imageObj.websiteUrl}/>)
-			
-		// 	);
-		// 	//update the state to have the park image
-		// 	this.setState({
-		// 		parkPhoto: parkImg,
-		// 		imageLink: image2
-		// 	})
-		// 	console.log("Reset image Link")
-		// 	console.log(this.state.imageLink)
-
-		// }, 
-		// err => {
-		// 	console.log(err)
-		// });
-
-
-		// //Fetch the nearby park information
-		// fetch("http://localhost:8081/nearbyParks/" + parkInput,
-		// {
-		// 	method: "GET"
-		// }).then(res => {
-		// 	return res.json();
-		// }, err => {
-		// 	console.log(err);
-		// }).then(nearbyParks => {
-		// 	console.log(nearbyParks);
-		// 	//save the image and park details for the nearby parks
-		// 	let nearbyPark = nearbyParks.map((parkObj, i) =>
-		// 	<ParkSummary imageUrl={parkObj.image1loc} credit={parkObj.image1credit} name = {parkObj.nearbyPark} rating={parkObj.rating} distance={parkObj.distanceInMiles}/>
-		// 	);
-		// 	//update the state to have the park image
-		// 	this.setState({
-		// 		nearbyParks: nearbyPark
-		// 	})
-			
-
-		// }, 
-		// err => {
-		// 	console.log(err)
-		// });
 
 
 		// //Fetch the park attendance information
@@ -255,8 +266,9 @@ export default class NPFinder extends React.Component {
 
 	}
 
-
+	
 	render() {
+		
 		console.log("Selected month is:")
 		console.log(this.state.selectedMonth)
 		let hStyle = {
@@ -267,21 +279,36 @@ export default class NPFinder extends React.Component {
 		let tStyle = {
 			"opacity":this.state.opacity,
 		};
-		
+		const monthNames = ["January", "February", "March", "April", "May", "June", 
+				"July", "August", "September", "October", "November", "December"];
+
 
 		return (
+
 			
-			<div className="NPFinder" style={{ 	backgroundImage: `url(${this.state.imageLink})`, backgroundSize: 'cover'}}>
+			<div className="ParkRecommendations" style={{ 	backgroundImage: `url(${this.state.imageLink})`, backgroundSize: 'cover'}}>
 			<PageNavbar active="Finder" />
+
+
+				{/* <d=-iv> */}
+				
+				{/* <div>Change coords</div>
+				<input name="lat" value={} onChange={this.onInputChange} />
+				<input name="lng" value={} onChange={this.onInputChange} />
+				</div>
+				 */}
+				
+				
 
 			<div className="container np-container">
 			  <div className="jumbotron1">
-				<div className="h5">Get National Park Information</div>
+				<div className="h3">Trip Planner  </div>
 
 				<div className="years-container">
 				  <div className="dropdown-container">
+					  Find the best parks to visit in the month of: 	   
 					<select value={this.state.selectedMonth} onChange={this.handleChange} className="dropdown" id="parksDropdown">
-						<option select value> -- select an option -- </option>
+						<option select value> -- select a month -- </option>
 						{this.state.months}
 					</select>
 					<button className="submit-btn" id="decadesSubmitBtn" onClick={this.submitMonth}>Search</button>
@@ -290,21 +317,18 @@ export default class NPFinder extends React.Component {
 			  </div>
 
 			  <div className="container movies-container">
-          <br></br>
+          	<hr />
+			{this.state.weatherDetail ? (
+				<GoogleMap position={{ lat: Number(this.state.latitudes[0]), lng: Number(this.state.longitudes[0]) }} googleKey={"AIzaSyDIVLDtctP_dXPybzkrHX0yxGnt2yGm7BQ"} />
+				) : (
+				<div>missing month input</div>
+			)}
+
           <div className="jumbotron">
             <div className="movies-container">
               <div className="movies-header">
-                <div className="header"><strong>Name</strong></div>
-                <div className="header"><strong>Lat</strong></div>
-				<div className="header"><strong>Long</strong></div>
-                <div className="header"><strong>State</strong></div>
-                <div className="header"><strong>High Temp</strong></div>
-                <div className="header"><strong>Low Temp</strong></div>
-                <div className="header"><strong>Avg Temp</strong></div>
-                <div className="header"><strong>sunHours</strong></div>
-				<div className="header"><strong>snowfall</strong></div>
-                <div className="header"><strong>UV Index</strong></div>
-                <div className="header"><strong>month</strong></div>
+				  
+              <h2 style={hStyle}>Recommended Parks in  {monthNames[this.state.selectedMonth-1]}</h2>
               </div>
               <div className="results-container" id="results">
                 {this.state.weatherDetail}
@@ -312,6 +336,8 @@ export default class NPFinder extends React.Component {
             </div>
           </div>
         </div>
+		
+
 			  {/* <div className="container movies-container">
 				<div className="jumbotron">
 				<div className="parks-container">
@@ -373,4 +399,3 @@ export default class NPFinder extends React.Component {
 		);
 	}
 }
-
