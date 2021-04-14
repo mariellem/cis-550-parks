@@ -23,7 +23,7 @@ function getPlaces(req, res) {
 
 function getParkNames(req, res) {
 	var query = `
-    SELECT name FROM park_details
+    SELECT name FROM places where type = "National Park";
   `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -49,7 +49,7 @@ function getParkDetails(req, res) {
   var inputPark = req.params.parkInput;
   var query = `
     SELECT *
-    FROM park_details pd 
+    FROM park_details pd join places p on pd.placeId = p.placeId
     WHERE pd.name = '${inputPark}'
     ;  
   `;
@@ -80,7 +80,7 @@ function getParkAttendance(req, res) {
 	var query = `
     SELECT * FROM park_attendance 
     where parkId in (
-      SELECT parkId from park_details pd
+      SELECT placeId from places pd
       where pd.name = '${inputPark}'
     ) and year > 2010;
   `;
@@ -108,10 +108,11 @@ function getReviews(req, res) {
 function getPhotos(req, res) {
   let inputPark = req.params.parkInput
 	var query = `
-    SELECT * FROM photos p 
+    SELECT * FROM photos ph 
     JOIN park_details pd 
-    on p.parkId = pd.parkId
-    WHERE pd.name = '${inputPark}';
+    on ph.parkId = pd.placeId
+    JOIN places p on p.placeId = pd.placeId
+    WHERE p.name = '${inputPark}';
   `;
   console.log(query);
   connection.query(query, function(err, rows, fields) {
@@ -124,12 +125,13 @@ function getPhotos(req, res) {
 
 function getNearbyParks(req, res) {
   let inputPark = req.params.parkInput
-  var query = `SELECT p1.name AS nearbyPark, 
+  var query = `SELECT p.name AS nearbyPark, 
   ST_Distance_Sphere( point(myPark.lng, myPark.lat), point(p1.lng, p1.lat))*.000621371192 
     AS distanceInMiles, p1.rating,  image1loc, image1credit
-  FROM (SELECT * FROM park_details pd WHERE pd.name='${inputPark}') myPark 
-  JOIN park_details p1 ON p1.parkId<>myPark.parkId 
+  FROM (SELECT places.placeId, lng, lat FROM places join park_details on places.placeId = park_details.placeId where places.name='${inputPark}') myPark 
+  JOIN park_details p1 ON p1.placeId<>myPark.placeId 
   JOIN photos ph on ph.parkId = p1.parkId
+  JOIN places p on p1.placeId = p.placeId
   ORDER BY distanceInMiles ASC 
   LIMIT 3;`;
   
@@ -205,7 +207,7 @@ function getMonthNames(req, res) {
 function getBestParkTempByMonth(req, res) {
   var inputMonth = req.params.monthInput;
   var query = `
-    SELECT w.lat, w.lng, pd.name, p.state, DATE_FORMAT(w.date,'%M') AS month, AVG(w.maxTempF) AS high, 
+    SELECT w.lat, w.lng, p.name, p.state, DATE_FORMAT(w.date,'%M') AS month, AVG(w.maxTempF) AS high, 
       AVG(w.mintempF) AS low, AVG (w.avgtempF) AS average, AVG(w.totalSnow_cm) AS snowfall, AVG(w.sunHour) AS sunHours, AVG(w.uvIndex) AS uvIndex 
     FROM historical_weather w 
     JOIN park_details pd ON w.lat=pd.lat AND w.lng=pd.lng 
@@ -213,7 +215,7 @@ function getBestParkTempByMonth(req, res) {
     WHERE MONTH(w.date) = ${inputMonth}
     GROUP BY w.lat, w.lng, MONTHNAME(w.date)
     HAVING AVG(w.avgTempF) >=50 AND AVG(w.avgTempF) <=55
-    ORDER BY pd.name, w.date;
+    ORDER BY p.name, w.date;
   `;
   connection.query(query, function(err, rows, fields){
     if (err)console.log(err);

@@ -284,28 +284,8 @@ export default class NPFinder extends React.Component {
 							  {this.state.nearbyParks}
 							</div>
 					    
-					</section> 
-
-				</td>
-				<td class="mp-bordered"></td>
-				<td class="mp-right">
-				<section>
-				  
-				  <h2 style={hStyle}>Selected Park</h2>
-				  		<div className="infobox" id="parkResults" align="center">
-			            	{this.state.parkPhoto}
-			          	</div>
-				  
-				  </section>
-				  <section>
-				  
-				  <table className="attendancetable" align="center">
-				  <th colspan="3" style={hStyle}>Yearly Attendance</th>
-			            	{this.state.parkAttendance}
-			          	</table>
-						  </section>
-				</td>
-				<tr vertical-align="top">
+					</section>
+					<section>
 					<td >
 					<section className="backgroundBlue" align="center">
 					<div><span>&#9788;</span> 5 Day Historical Weather Forcast <span>&#9788;</span></div>						
@@ -331,9 +311,28 @@ export default class NPFinder extends React.Component {
 						</td>
 						<td>
 						</td>
-						
-						<td colspan="3">
-					    <section className="backgroundGray">
+					</section> 
+
+				</td>
+				<td class="mp-bordered"></td>
+				<td class="mp-right">
+				<section>
+				  
+				  <h2 style={hStyle}>Selected Park</h2>
+				  		<div className="infobox" id="parkResults" align="center">
+			            	{this.state.parkPhoto}
+			          	</div>
+				  
+				  </section>
+				  <section>
+				  
+				  <table className="attendancetable" align="center">
+				  <th colspan="3" style={hStyle}>Yearly Attendance</th>
+			            	{this.state.parkAttendance}
+			          	</table>
+
+						  </section>
+						  <section className="backgroundGray">
 
 						<table>
 							<tr>
@@ -346,6 +345,11 @@ export default class NPFinder extends React.Component {
 						</table>
 
 					</section>
+				</td>
+				<tr vertical-align="top">
+
+						<td colspan="3">
+					    
 					</td>
 
 						</tr>
