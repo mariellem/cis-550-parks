@@ -334,10 +334,10 @@ export default class NPFinder extends React.Component {
 						  </section>
 						  <section className="backgroundGray">
 
-						<table>
+						<table className="reviewTable">
 							<tr>
 								<td>
-									<div className="header"><strong>Reviews</strong></div>
+									<div className="header" align="center"><strong>Reviews</strong></div>
 								</td>
 								
 								</tr>

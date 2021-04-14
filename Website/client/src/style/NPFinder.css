@@ -130,12 +130,15 @@ caption {
   flex: 1 0 25%;
 }
 
-.park .header, .parkReviews .rating, .parkReviews .review{
+.park .header, .parkReviews .review{
   flex: 1 0 25%;
 }
-.park .header, .parkReviews .rating, .parkReviews .review{
+
+.parkReviews .rating{
   flex: 1 0 25%;
+  line-height: 75%;
 }
+
 
 .temptable, .attendancetable{
   text-align: center;
@@ -152,4 +155,15 @@ caption {
 .backgroundBlue {
   vertical-align: top;
   background:rgba(49, 173, 211, 0.5);
+}
+.reviewTable{
+  padding-bottom: 20px;
+}
+.reviewTable .rating{
+  font-family: 'Times New Roman', Times, serif;
+  line-height: 100%;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+
 }
