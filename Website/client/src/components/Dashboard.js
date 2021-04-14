@@ -11,8 +11,8 @@ export default class Dashboard extends React.Component {
     // The state maintained by this React Component. This component maintains the list of genres,
     // and a list of movies for a specified genre.
     this.state = {
-      genres: [],
-      movies: [],
+      //genres: [],
+      //movies: [],
       parks: []
     }
   }
@@ -20,7 +20,7 @@ export default class Dashboard extends React.Component {
   // React function that is called when the page load.
   componentDidMount() {
     // Send an HTTP request to the server.
-    fetch("http://localhost:8081/places",
+    fetch("http://localhost:8081/parksandStates",
     {
       method: 'GET' // The type of HTTP request.
     }).then(res => {
@@ -34,7 +34,8 @@ export default class Dashboard extends React.Component {
       // Map each genreObj in genreList to an HTML element:
       // A button which triggers the showMovies function for each genre.
       let parksDivs = parkList.map((parkObj, i) =>
-      <DashboardParkRow placeId={parkObj.placeId} name={parkObj.name} state={parkObj.State}/>
+      //<DashboardParkRow placeId={parkObj.placeId} name={parkObj.name} state={parkObj.State}/>
+      <DashboardParkRow name={parkObj.name} state={parkObj.State}/>
       );
       // Set the state of the genres list to the value returned by the HTTP response from the server.
       this.setState({
@@ -59,7 +60,7 @@ export default class Dashboard extends React.Component {
           <div className="jumbotron">
             <div className="movies-container">
               <div className="movies-header">
-                <div className="header-lg"><strong>Id</strong></div>
+                
                 <div className="header"><strong>Name</strong></div>
                 <div className="header"><strong>State</strong></div>
               </div>
@@ -73,3 +74,5 @@ export default class Dashboard extends React.Component {
     );
   }
 }
+
+// <div className="header-lg"><strong>Id</strong></div>

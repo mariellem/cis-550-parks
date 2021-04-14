@@ -15,6 +15,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/places', routes.getPlaces);
 
+app.get('/parksandStates', routes.getParksandStates);
+
 app.get('/parkNames', routes.getParkNames);
 
 app.get('/parkDetails/:parkInput', routes.getParkDetails);

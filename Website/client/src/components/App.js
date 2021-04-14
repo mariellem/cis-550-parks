@@ -4,7 +4,7 @@ import {
 	Route,
 	Switch
 } from 'react-router-dom';
-import Dashboard from './Dashboard';
+import Main from './Main';
 import NPFinder from './NPFinder';
 import Recommendations from './ParkRecommendations';
 
@@ -22,14 +22,14 @@ export default class App extends React.Component {
 							exact
 							path="/"
 							render={() => (
-								<Dashboard />
+								<Main />
 							)}
 						/>
 						<Route
 							exact
-							path="/dashboard"
+							path="/Main"
 							render={() => (
-								<Dashboard />
+								<Main />
 							)}
 						/>
 						<Route

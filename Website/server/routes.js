@@ -21,6 +21,18 @@ function getPlaces(req, res) {
   });
 }
 
+function getParksandStates(req, res){
+	var query = `
+    SELECT name, State FROM places WHERE type = "National Park";
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
 function getParkNames(req, res) {
 	var query = `
     SELECT name FROM places where type = "National Park";
@@ -232,6 +244,7 @@ function getBestParkTempByMonth(req, res) {
 // The exported functions, which can be accessed in index.js.
 module.exports = {
   getPlaces: getPlaces,
+  getParksandStates: getParksandStates,
   getAllParkDetails: getAllParkDetails,
   getParkDetails: getParkDetails,
   getParkNames: getParkNames,

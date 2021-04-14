@@ -1,0 +1,15 @@
+.mainContainer {
+    background:rgba(199, 76, 76, 0.8);
+    display: flex;  
+    justify-content: center;
+  }
+
+.mainTable {
+    background: rgba(103, 76, 199, 0.8);
+    align-self: center;
+    width: 200px;
+}
+
+
+
+  
