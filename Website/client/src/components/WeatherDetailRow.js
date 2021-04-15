@@ -5,21 +5,17 @@ export default class WeatherDetailRow extends React.Component {
 	constructor(props) {
 		super(props);
 	}
-
 	render() {
 		return (
 			<div className="weatherResults">
-				<div className="name">{this.props.name}</div>
-				<div className="lat">{this.props.lat}</div>
-				<div className="lng">{this.props.lng}</div>
-				<div className="state">{this.props.state}</div>
-				<div className="high">{this.props.high}</div>
-				<div className="low">{this.props.low}</div>
-				<div className="average">{this.props.average}</div>
-				<div className="sunHours">{this.props.sunHours}</div>
-				<div className="snowfall">{this.props.snowfall}</div>
-				<div className="uvIndex">{this.props.uvIndex}</div>
-				<div className="month">{this.props.month}</div>
+				<div className="name">{this.props.name} ({this.props.state})</div>
+				<div className="high">HIGH: {Math.round(this.props.high)} degrees F</div>
+				<div className="low">LOW: {Math.round(this.props.low)} degrees F </div>
+				<div className="average">AVERAGE: {Math.round(this.props.average)} degrees F</div>
+				<div className="sunHours">{Math.round(this.props.sunHours)} hours of sun expected</div>
+ 				<div className="snowfall">{Math.round(this.props.snowfall)} inches of snow expected </div>
+				<div className="uvIndex">UV INDEX: {Math.round(this.props.uvIndex)} </div>
+				<br></br>
 			</div>
 		);
 	}
