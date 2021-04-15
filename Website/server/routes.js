@@ -33,6 +33,25 @@ function getParksandStates(req, res){
   });
 }
 
+function getPopularParksInRegion(req, res){
+  var query = `
+  SELECT pl.name AS Park, AVG(a.visitors) AS "Average Visitors (per year 2012-2016)"
+  FROM park_attendance a
+  JOIN park_details p ON p.parkId = a.parkId 
+  JOIN places pl ON p.placeId = pl.placeId 
+  WHERE p.lat<37 AND p.lat>26 AND p.lng<-95 AND p.lng>-114.7 AND a.YEAR >= 2012 AND a.YEAR <= 2016
+  GROUP BY p.name
+  ORDER BY AVG(a.visitors) DESC
+  LIMIT 3;
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
+}
+
 function getParkNames(req, res) {
 	var query = `
     SELECT name FROM places where type = "National Park";
@@ -245,6 +264,7 @@ function getBestParkTempByMonth(req, res) {
 module.exports = {
   getPlaces: getPlaces,
   getParksandStates: getParksandStates,
+  getPopularParksInRegion: getPopularParksInRegion,
   getAllParkDetails: getAllParkDetails,
   getParkDetails: getParkDetails,
   getParkNames: getParkNames,

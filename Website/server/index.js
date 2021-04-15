@@ -17,6 +17,8 @@ app.get('/places', routes.getPlaces);
 
 app.get('/parksandStates', routes.getParksandStates);
 
+app.get('/popularParksInRegion', routes.getPopularParksInRegion);
+
 app.get('/parkNames', routes.getParkNames);
 
 app.get('/parkDetails/:parkInput', routes.getParkDetails);
