@@ -47,7 +47,7 @@ export default class ParkReviewRow extends React.Component {
 		else {
 			return (
 				<tr>
-					<div className="rating">{this.props.rating}:{this.props.review}</div>
+					<div className="rating">{this.props.rating}{this.props.review}</div>
 				</tr>
 			);
 		}

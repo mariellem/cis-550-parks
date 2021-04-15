@@ -201,19 +201,45 @@ export default class NPFinder extends React.Component {
 		}).then(parkReviews => {
 			console.log(parkReviews);
 			//save the image and park details to a park info box object
-			let parkReview = parkReviews.map((parkRevObj, i) =>
+			var parkReview = parkReviews.map((parkRevObj, i) =>
 			<ParkReviewRow date = {parkRevObj.reviewDate} rating={parkRevObj.rating} review={parkRevObj.review}/>
 			);
-			//update the state to have the park image
+			if (parkReview.length < 1){
+				parkReview = <ParkReviewRow review="Sorry, no reviews available!"/>;
+			}
 			this.setState({
 				parkReviews: parkReview
 			})
-			
-
 		}, 
 		err => {
 			console.log(err)
 		});
+
+
+				// //Fetch the park reviews
+				// fetch("http://localhost:8081/parkReviews/" + parkInput,
+				// {
+				// 	method: "GET"
+				// }).then(res => {
+				// 	return res.json();
+				// }, err => {
+				// 	console.log(err);
+				// }).then(parkReviews => {
+				// 	console.log(parkReviews);
+				// 	//save the image and park details to a park info box object
+				// 	let parkReview = parkReviews.map((parkRevObj, i) =>
+				// 	<ParkReviewRow date = {parkRevObj.reviewDate} rating={parkRevObj.rating} review={parkRevObj.review}/>
+				// 	);
+				// 	this.setState({
+				// 		parkReviews: parkReview
+				// 	})
+					
+		
+				// }, 
+				// err => {
+				// 	console.log(err)
+				// });
+		
 
 		// Fetch the park 5 day weather
 		fetch("http://localhost:8081/park5DayWeather/" + parkInput,
@@ -266,7 +292,7 @@ export default class NPFinder extends React.Component {
 				<div className="years-container">
 				  <div className="dropdown-container">
 					<select value={this.state.selectedPark} onChange={this.handleChange} className="dropdown" id="parksDropdown">
-						<option select value> -- select an option -- </option>
+						<option select value> -- Select a Park -- </option>
 						{this.state.parks}
 					</select>
 					<button className="submit-btn" id="decadesSubmitBtn" onClick={this.submitPark}>Submit</button>
