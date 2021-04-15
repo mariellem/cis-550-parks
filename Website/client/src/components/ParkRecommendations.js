@@ -38,7 +38,7 @@ class GoogleMap extends React.Component {
 	  var infoWindowContent = [];
 	  for (var j = 0; j < position.length; j++) {
 		const var2 = 'abc'; //detail[j].props.name;
-		infoWindowContent.push(['<div class="info_content">' +'<h3>'+ {var2} +'</h3>' + '<p>abcd.</p>' +        '</div>']);
+		infoWindowContent.push(['<div class="info_content">' +'<h3>'+ 'The London Eye' +'</h3>' + '<p>abcd.</p>' +        '</div>']);
 
 	  }
     
@@ -349,9 +349,9 @@ export default class ParkRecommendations extends React.Component {
 				  
               <h2 style={hStyle}>Recommended Parks in  {monthNames[this.state.selectedMonth-1]}</h2>
               </div>
-              {/* <div className="results-container" id="results">
+              <div className="results-container" id="results">
                 {this.state.weatherDetail}
-              </div> */}
+              </div>
             </div>
           </div>
         </div>
