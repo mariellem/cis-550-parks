@@ -9,6 +9,7 @@ class GoogleMap extends React.Component {
 	componentDidMount() {
 	  if (!window.google || !window.google.maps) {
 		const { googleKey } = this.props;
+
 		// require is not working inside stackoverflow snippets
 		// we are using a cdn for scriptjs, you can use npm
 		const $script = require(`scriptjs`);
@@ -22,29 +23,66 @@ class GoogleMap extends React.Component {
 	componentDidUpdate(prevProps) {
 	  const { position } = this.props;
 	  if (prevProps.position !== position) {
-		this.map && this.map.setCenter(position);
-		this.marker && this.marker.setPosition(position);
+		this.map && this.map.setCenter(position[0]);
+		for (var i = 0; i < position.length; i++) {
+			this.marker && this.marker.setPosition(position[i]);
+		}
 	  }
+	//   map.fitBounds(bounds);
 	}
   
 	handleGoogleLoad = () => {
 	  const { position } = this.props;
+	  const {detail} = this.props;
+
+	  var infoWindowContent = [];
+	  for (var j = 0; j < position.length; j++) {
+		const var2 = 'abc'; //detail[j].props.name;
+		infoWindowContent.push(['<div class="info_content">' +'<h3>'+ {var2} +'</h3>' + '<p>abcd.</p>' +        '</div>']);
+
+	  }
+    
 	  this.map = new window.google.maps.Map(this.mapRef, {
 		scaleControl: true,
 		center: null,
-		zoom: 5
+		zoom: 2
 	  });
+	  var infoWindow = new window.google.maps.InfoWindow(), marker, i;
+
+	  var bounds = new window.google.maps.LatLngBounds();
+		// { lat: Number(this.state.positions[0][0]), lng: Number(this.state.positions[0][1]) }} 
+
+
 	  for (var i = 0; i < position.length; i++) {
-		console.log("value");
-	  }
-	  this.marker = new window.google.maps.Marker({
-		map: this.map,
-		position: position
-	  });
-  
-	  this.map.setCenter(position);
-	  this.marker.setPosition(position);
+		bounds.extend(position[i]);
+
+	 	this.marker = new window.google.maps.Marker({
+			map: this.map,
+			position: position[i]}
+		);
+	
+		this.marker.setPosition(position[i]);
+
+
+		// Allow each marker to have an info window    
+        window.google.maps.event.addListener(this.marker, 'click', (function(marker, i) {
+            return function() {
+                infoWindow.setContent(infoWindowContent[i][0]);
+                infoWindow.open(this.map, marker);
+            }
+        })(this.marker, i));
+
+
+		}
+	  this.map.fitBounds(bounds);
+	//   this.map.setCenter(position[0]);
+
+	   // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
+    	
+        // window.google.maps.event.removeListener(boundsListener);
 	};
+	
+	
   
 	render() {
 	  return <div style={{ height: "350px" }} ref={ref => (this.mapRef = ref)} />;
@@ -64,6 +102,7 @@ export default class ParkRecommendations extends React.Component {
 			weatherDetail: [],
 			latitudes: [0],
 			longitudes: [0],
+			positions: false,
 			opacity: 0
 		};
 		// this.loadScript = this.loadScript.bind(this);
@@ -71,21 +110,6 @@ export default class ParkRecommendations extends React.Component {
 		this.submitMonth = this.submitMonth.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
-
-	// onInputChange = ({ target }) => {
-	// 	this.setState({ [target.name]: target.value });
-	//   };
-	// state = { lat: 40.741895, lng: -73.989308, googleKey: "" };
-
-	// loadScript(){
-
-	// 	const API_KEY = "AIzaSyDIVLDtctP_dXPybzkrHX0yxGnt2yGm7BQ";		//process.env.REACT_APP_API_KEY;
-	// 	const url = "https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places";
-		
-	// 	const s = document.createElement("script");
-	// 	s.src=url;
-	// 	document.head.appendChild(s);
-	// }
 
 	componentDidMount() {
 		// this.loadScript();
@@ -146,6 +170,7 @@ export default class ParkRecommendations extends React.Component {
 		//| lat     | lng      | name    | state | month    | high  | low    | average     | snowfall    | sunHours           | uvIndex |
 		var latArray = [];
 		var lngArray = [];
+		var locsArray = [];
 		fetch("http://localhost:8081/recommendations/" + monthInput,
 		{
 			method: "GET"
@@ -154,15 +179,14 @@ export default class ParkRecommendations extends React.Component {
 		}, err => {
 			console.log(err);
 		}).then(weatherList => {
-			console.log(weatherList); //displays your JSON object in the console
+			// console.log(weatherList); //displays your JSON object in the console
 			// console.log(weatherList[0].lat);
 			for (var i = 0; i < weatherList.length; i++) {
 				latArray.push(weatherList[i].lat);
 				lngArray.push(weatherList[i].lng);
+				
+				locsArray.push({ lat: Number(weatherList[i].lat), lng: Number(weatherList[i].lng) });
 			}
-			for (var j = 0; j < latArray.length; j++) {
-				console.log(latArray[j]);
-			  }
     	let weatherDivs = weatherList.map((weatherDetailObj, i) => 
 			<WeatherDetailRow 
 				name={weatherDetailObj.name} 
@@ -174,12 +198,14 @@ export default class ParkRecommendations extends React.Component {
 				snowfall={weatherDetailObj.snowfall} 
 				uvIndex={weatherDetailObj.uvIndex} 
 				month = {weatherDetailObj.month}/>
-    	);
-		//This saves our HTML representation of the data into the state, which we can call in our render function
+		);
+	
+		//Th is saves our HTML representation of the data into the state, which we can call in our render function
 		this.setState({
 			weatherDetail: weatherDivs,
 			latitudes: latArray,
-			longitudes: lngArray
+			longitudes: lngArray,
+			positions: locsArray
 		});
     	}, err => {
      	 // Print the error if there is one.
@@ -288,17 +314,7 @@ export default class ParkRecommendations extends React.Component {
 			
 			<div className="ParkRecommendations" style={{ 	backgroundImage: `url(${this.state.imageLink})`, backgroundSize: 'cover'}}>
 			<PageNavbar active="Finder" />
-
-
-				{/* <d=-iv> */}
-				
-				{/* <div>Change coords</div>
-				<input name="lat" value={} onChange={this.onInputChange} />
-				<input name="lng" value={} onChange={this.onInputChange} />
-				</div>
-				 */}
-				
-				
+			
 
 			<div className="container np-container">
 			  <div className="jumbotron1">
@@ -318,8 +334,11 @@ export default class ParkRecommendations extends React.Component {
 
 			  <div className="container movies-container">
           	<hr />
-			{this.state.weatherDetail ? (
-				<GoogleMap position={{ lat: Number(this.state.latitudes[0]), lng: Number(this.state.longitudes[0]) }} googleKey={"AIzaSyDIVLDtctP_dXPybzkrHX0yxGnt2yGm7BQ"} />
+			
+			{this.state.positions ? (
+				<GoogleMap position={this.state.positions}
+					detail = {this.state.weatherDetail}
+					googleKey={"AIzaSyDIVLDtctP_dXPybzkrHX0yxGnt2yGm7BQ"} />
 				) : (
 				<div>missing month input</div>
 			)}
@@ -330,9 +349,9 @@ export default class ParkRecommendations extends React.Component {
 				  
               <h2 style={hStyle}>Recommended Parks in  {monthNames[this.state.selectedMonth-1]}</h2>
               </div>
-              <div className="results-container" id="results">
+              {/* <div className="results-container" id="results">
                 {this.state.weatherDetail}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

@@ -7,7 +7,6 @@ export default class WeatherDetailRow extends React.Component {
 	}
 	render() {
 		return (
-			
 			<div className="weatherResults">
 				<div className="name">{this.props.name} ({this.props.state})</div>
 				<div className="high">HIGH: {Math.round(this.props.high)} degrees F</div>
