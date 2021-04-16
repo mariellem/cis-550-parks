@@ -4,11 +4,38 @@
     justify-content: center;
   }
 
-.mainTable {
+/* .mainTable {
     background: rgba(103, 76, 199, 0.8);
     align-self: center;
-    width: 200px;
-}
+    width: 550px;
+} */
+.column {
+    float: left;
+    padding: 10px;
+    height: 300px; /* Should be removed. Only for demonstration */
+    }
+    
+    .left {
+    width: 25%;
+    }
+    
+    .right {
+    width: 75%;
+    }
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+@media screen and (max-width: 600px) {
+    .column {
+      width: 100%;
+    }
+  }
+
 
 
 
