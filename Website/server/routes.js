@@ -238,17 +238,13 @@ function getMonthNames(req, res) {
 function getMonthlyTrends(req, res) {
   var inputMonth = req.params.monthInput;
   var query = `
-  select p.name, Month(hw.date), Year(hw.date), AVG(hw.mintempF) as min_TempF, AVG(hw.maxTempF) as max_TempF, SUM(totalSnow_cm) as total_snow, pa.visitors / 12 as visitors 
+  select p.name, Month(hw.date) AS mo_num, Year(hw.date) AS year, AVG(hw.mintempF) as min_TempF, AVG(hw.maxTempF) as max_TempF, SUM(totalSnow_cm) as total_snow, pa.visitors / 12 as visitors 
   from park_attendance pa join park_details pd on pa.parkId = pd.placeId 
   join historical_weather hw on hw.lat = pd.lat and hw.lng = pd.lng and pa.year = Year(hw.date)
   join places p on p.placeId = pd.placeId
   where Month(hw.date) = ${inputMonth}
-  group by pd.name, Month(hw.date), year(hw.date);`;
-
-  console.log("Query is:")
-  console.log(query);
-
-  //var query2 = `select * from temp${inputMonth};`;
+  group by pd.name, Month(hw.date), year(hw.date)
+  order by visitors desc;`;
 
   connection.query(query, function(err, rows, fields){
     if (err)console.log(err);
