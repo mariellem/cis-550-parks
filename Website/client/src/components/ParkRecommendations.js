@@ -7,82 +7,82 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 var trendsMap = {}; //used for caching the park trends
 
-class Plot extends React.Component {
-	componentDidMount() {
-	//   if (!window.google || !window.google.maps) {
-		console.log('Hello world');
-		
-		const $script = require(`chartjs`);
-		$script(
-			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>,
-		  	this.handlePlotLoad
-		);
-	//   }
-	}
-	// componentDidUpdate(prevProps) {
-	// 	// @TODO fix update to load things
- 	//   const { position } = this.props;
-	//   if (prevProps.position !== position) {
-	// 	this.map && this.map.setCenter(position[0]);
-	// 	for (var i = 0; i < position.length; i++) {
-	// 		this.marker && this.marker.setPosition(position[i]);
-	// 	}
-	//   }
-	// }
-  
-	handlePlotLoad = () => {
-		
-	// 	const { position } = this.props;
-	//   const {detail} = this.props;
-	  const config = {
-		type: 'line',
-		type: 'bar',
-    	data: {
-        	labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        	datasets: [{
-				label: '# of Votes',
-				data: [12, 19, 3, 5, 2, 3],
-				backgroundColor: [
-					'rgba(255, 99, 132, 0.2)',
-					'rgba(54, 162, 235, 0.2)',
-					'rgba(255, 206, 86, 0.2)',
-					'rgba(75, 192, 192, 0.2)',
-					'rgba(153, 102, 255, 0.2)',
-					'rgba(255, 159, 64, 0.2)'
-				],
-				borderColor: [
-					'rgba(255, 99, 132, 1)',
-					'rgba(54, 162, 235, 1)',
-					'rgba(255, 206, 86, 1)',
-					'rgba(75, 192, 192, 1)',
-					'rgba(153, 102, 255, 1)',
-					'rgba(255, 159, 64, 1)'
-				],
-				borderWidth: 1
-			}]
-		},
-		options: {
-			scales: {
-				y: {
-					beginAtZero: true
-				}
-			}
-		}
-		};
+// class Plot extends React.Component {
+// 	componentDidMount() {
+// 	//   if (!window.google || !window.google.maps) {
+// 		console.log('Hello world');
 
-	this.myChart = new Chart(
-		document.getElementById('myChart'),
-		config
-	);
-	console.log(this.myChart);
-    	
-	};
+// 		// const $script = require(`chartjs`);
+// 		$script(
+// 			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>,
+// 		  	this.handlePlotLoad
+// 		);
+// 	//   }
+// 	}
+// 	// componentDidUpdate(prevProps) {
+// 	// 	// @TODO fix update to load things
+//  	//   const { position } = this.props;
+// 	//   if (prevProps.position !== position) {
+// 	// 	this.map && this.map.setCenter(position[0]);
+// 	// 	for (var i = 0; i < position.length; i++) {
+// 	// 		this.marker && this.marker.setPosition(position[i]);
+// 	// 	}
+// 	//   }
+// 	// }
   
-	render() { // @TODO why doesnt this work??
-	  return <canvas id="myChart" width="800" height="400"></canvas>
-	  //<div style={{ height: "350px" }} ref={ref => (this.myChart = ref)} />;
-	}
-  }
+// 	handlePlotLoad = () => {
+		
+// 	// 	const { position } = this.props;
+// 	//   const {detail} = this.props;
+// 	  const config = {
+// 		type: 'line',
+// 		type: 'bar',
+//     	data: {
+//         	labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+//         	datasets: [{
+// 				label: '# of Votes',
+// 				data: [12, 19, 3, 5, 2, 3],
+// 				backgroundColor: [
+// 					'rgba(255, 99, 132, 0.2)',
+// 					'rgba(54, 162, 235, 0.2)',
+// 					'rgba(255, 206, 86, 0.2)',
+// 					'rgba(75, 192, 192, 0.2)',
+// 					'rgba(153, 102, 255, 0.2)',
+// 					'rgba(255, 159, 64, 0.2)'
+// 				],
+// 				borderColor: [
+// 					'rgba(255, 99, 132, 1)',
+// 					'rgba(54, 162, 235, 1)',
+// 					'rgba(255, 206, 86, 1)',
+// 					'rgba(75, 192, 192, 1)',
+// 					'rgba(153, 102, 255, 1)',
+// 					'rgba(255, 159, 64, 1)'
+// 				],
+// 				borderWidth: 1
+// 			}]
+// 		},
+// 		options: {
+// 			scales: {
+// 				y: {
+// 					beginAtZero: true
+// 				}
+// 			}
+// 		}
+// 		};
+
+// 	this.myChart = new Chart(
+// 		document.getElementById('myChart'),
+// 		config
+// 	);
+// 	console.log(this.myChart);
+    	
+// 	};
+  
+// 	render() { // @TODO why doesnt this work??
+// 	  return <canvas id="myChart" width="800" height="400"></canvas>
+// 	  //<div style={{ height: "350px" }} ref={ref => (this.myChart = ref)} />;
+// 	}
+//   }
 
 
 
@@ -434,7 +434,7 @@ export default class ParkRecommendations extends React.Component {
 			<div className="ParkRecommendations" style={{ 	backgroundImage: `url(${this.state.imageLink})`, backgroundSize: 'cover'}}>
 			
 		{/* @TODO figure out how to call plot */}
-			<Plot  /> 
+			{/* <Plot  />  */}
 
 			<PageNavbar active="Finder" />
 			
@@ -476,7 +476,6 @@ export default class ParkRecommendations extends React.Component {
                 {/* {this.state.weatherDetail} */}
               </div>
 			  <div>The trend is: {this.state.trend}</div>
-			  <Plot  />
             </div>
           </div>
 		  
