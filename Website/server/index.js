@@ -41,7 +41,9 @@ app.get('/park5DayWeather/:parkInput', routes.getPark5DayWeather);
 
 app.get('/monthNames',routes.getMonthNames);
 
-app.get('/recommendations/:monthInput', routes.getBestParkTempByMonth); 
+app.get('/recommendations/:monthInput', routes.getBestParkTempByMonth);
+
+app.get('/trends/:monthInput', routes.getMonthlyTrends); 
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);

@@ -4,8 +4,11 @@ import WeatherDetailRow from './WeatherDetailRow';
 import '../style/NPFinder.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
+var trendsMap = {}; //used for caching the park trends
 // const map = new window.google.maps
 class GoogleMap extends React.Component {
+
 	componentDidMount() {
 	  if (!window.google || !window.google.maps) {
 		const { googleKey } = this.props;
@@ -149,7 +152,7 @@ export default class ParkRecommendations extends React.Component {
 			selectedMonth: e.target.value
 		});
 	}
-
+	
 	submitMonth() {
 		console.log("Submitted the month")
 		console.log(this.state.selectedMonth)
@@ -171,6 +174,7 @@ export default class ParkRecommendations extends React.Component {
 		var latArray = [];
 		var lngArray = [];
 		var locsArray = [];
+		
 		fetch("http://localhost:8081/recommendations/" + monthInput,
 		{
 			method: "GET"
@@ -187,6 +191,7 @@ export default class ParkRecommendations extends React.Component {
 				
 				locsArray.push({ lat: Number(weatherList[i].lat), lng: Number(weatherList[i].lng) });
 			}
+			console.log("Fetchigng recommendations");
     	let weatherDivs = weatherList.map((weatherDetailObj, i) => 
 			<WeatherDetailRow 
 				name={weatherDetailObj.name} 
@@ -199,6 +204,8 @@ export default class ParkRecommendations extends React.Component {
 				uvIndex={weatherDetailObj.uvIndex} 
 				month = {weatherDetailObj.month}/>
 		);
+			//fetch the weather and attendance trends
+		
 	
 		//Th is saves our HTML representation of the data into the state, which we can call in our render function
 		this.setState({
@@ -211,8 +218,46 @@ export default class ParkRecommendations extends React.Component {
      	 // Print the error if there is one.
      	 console.log(err);
     	});
-		
 
+		if ( (String(monthInput) in trendsMap)) { 
+			this.setState({
+				trend: trendsMap[monthInput]
+			});
+		}
+		else {
+			console.log("Fetching Trends");
+			fetch("http://localhost:8081/trends/" + monthInput,
+		{
+			method: "GET"
+		}).then(res => {
+			return res.json();
+		}, err => {
+			console.log(err);
+		}).then(trendList => {
+			console.log("Fetching trend for month:")
+			console.log(monthInput)
+    	trendsMap[monthInput] = "Month is" + monthInput /*weatherList.map((weatherDetailObj, i) => 
+			<WeatherDetailRow 
+				name={weatherDetailObj.name} 
+				state={weatherDetailObj.state} 
+				high={weatherDetailObj.high} 
+				low={weatherDetailObj.low} 
+				average={weatherDetailObj.average} 
+				sunHours={weatherDetailObj.sunHours} 
+				snowfall={weatherDetailObj.snowfall} 
+				uvIndex={weatherDetailObj.uvIndex} 
+				month = {weatherDetailObj.month}/> 
+		)*/;
+
+		this.setState({
+			trend: trendsMap[monthInput]
+		});
+    	}, err => {
+     	 // Print the error if there is one.
+     	 console.log(err);
+    	});
+		
+	}
 
 
 
@@ -352,11 +397,13 @@ export default class ParkRecommendations extends React.Component {
               <div className="results-container" id="results">
                 {this.state.weatherDetail}
               </div>
+			  <div>The trend is: {this.state.trend}</div>
             </div>
           </div>
+		  
         </div>
 		
-
+		
 			  {/* <div className="container movies-container">
 				<div className="jumbotron">
 				<div className="parks-container">
