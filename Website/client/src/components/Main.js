@@ -189,6 +189,9 @@ export default class Main extends React.Component {
 						<td class="mp-left">
 						<section>
 							<h2 style={hStyle}>MOST POPULAR PARKS</h2>
+							<div align="center"><b>Based on Average Annual Visitors </b></div>
+							<div align="center"><b>(from 2012-2016) </b></div>
+							<br/> 
 							<div className="infobox" id="parkResults" align="center">
 							  {this.state.popularParks}
 							</div>

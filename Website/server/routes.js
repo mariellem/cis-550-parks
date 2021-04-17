@@ -44,6 +44,36 @@ function getPopularParksInRegion(req, res){
     var highLat = 49
     var lowLng = -125.3
     var highLng = -117
+  } else if (inputRegion == 2) {
+    // Lat/Lng Rocky Mountain Region
+    var lowLat = 36.7
+    var highLat = 49
+    var lowLng = -119
+    var highLng = -103
+  } else if (inputRegion == 3) {
+    // Lat/Lng Southwest Region
+    var lowLat = 26
+    var highLat = 37
+    var lowLng = -114.7
+    var highLng = -95
+  } else if (inputRegion == 4) {
+    // Lat/Lng Midwest Region
+    var lowLat = 36.5
+    var highLat = 49
+    var lowLng = -104
+    var highLng = -81
+  } else if (inputRegion == 5) {
+    // Lat/Lng Northeast Region
+    var lowLat = 39.5
+    var highLat = 47.5
+    var lowLng = -80.5
+    var highLng = -66.7
+  } else if (inputRegion == 6) {
+    // Lat/Lng Southeast Region
+    var lowLat = 25.2
+    var highLat = 39.5
+    var lowLng = -94.5
+    var highLng = -74
   } else {
     // All Parks
     var lowLat = 6
@@ -64,23 +94,9 @@ function getPopularParksInRegion(req, res){
   WHERE p.lat<'${highLat}' AND p.lat> '${lowLat}'AND p.lng<'${highLng}' AND p.lng>'${lowLng}' AND a.YEAR >= 2012 AND a.YEAR <= 2016
   GROUP BY p.name
   ORDER BY AVG(a.visitors) DESC
-  LIMIT 3;
+  LIMIT 5;
   `;
 
-  // var lowLat = req.params.lowLatInput;
-  // var highLat = req.params.highLatInput;
-  // var lowLng = req.params.lowLngInput;
-  // var highLng = req.params.highLngInput;
-  // var query = `
-  // SELECT pl.name AS Park, AVG(a.visitors) AS Visitors
-  // FROM park_attendance a
-  // JOIN park_details p ON p.parkId = a.parkId 
-  // JOIN places pl ON p.placeId = pl.placeId 
-  // WHERE p.lat<'${highLat}' AND p.lat> '${lowLat}'AND p.lng<'${highLng}' AND p.lng>'${lowLng}' AND a.YEAR >= 2012 AND a.YEAR <= 2016
-  // GROUP BY p.name
-  // ORDER BY AVG(a.visitors) DESC
-  // LIMIT 3;
-  // `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
     else {

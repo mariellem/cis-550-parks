@@ -29,9 +29,9 @@ export default class MainPopularParksRow extends React.Component {
 	
 				<tr>
 				<td>
-						<div align="center"><b>Average Visitors </b></div>
-						<div align="center"><b>(per year 2012-2016) </b></div>
+						<div align="center"><b>Average Annual Attendance </b></div>
 						<div align="center">{Math.round(this.props.Visitors)} </div>
+						<br/>
 						
 				</td>
 				</tr>  
