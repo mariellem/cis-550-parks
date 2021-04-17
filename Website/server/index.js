@@ -45,6 +45,8 @@ app.get('/recommendations/:monthInput', routes.getBestParkTempByMonth);
 
 app.get('/trends/:monthInput', routes.getMonthlyTrends); 
 
+app.get('/getTrailsForPark/:parkInput', routes.getTrails);
+
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
-import ParkDetailRow from './ParkDetailRow';
+import TrailInfoBox from './TrailInfoBox';
 import ParkInfoBox from './ParkInfoBox';
 import ParkSummary from './ParkSummary';
 import ParkAttendance from './ParkAttendance';
@@ -216,11 +216,32 @@ export default class NPFinder extends React.Component {
 		});
 
 
+		// Fetch the parks 3 best trails
+		fetch("http://localhost:8081/getTrailsForPark/" + parkInput,
+		{
+			method: "GET"
+		}).then(res => {
+			return res.json();
+		}, err => {
+			console.log(err);
+		}).then(parkTrails => {
+			let parkT = parkTrails.map((ptObj, i) =>
+			<TrailInfoBox name = {ptObj.name} rating = {ptObj.rating} distance = {ptObj.distance}/>
+			);
+			this.setState({
+				trails: parkT
+			})
+			
+
+		}, 
+		err => {
+			console.log(err)
+		});
+
+
 
 	}
 	render() {
-		//console.log("Selected park is:")
-		//console.log(this.state.selectedPark)
 		let hStyle = {
 			"text-align": 'center',
 			"text-transform": 'uppercase',
@@ -270,7 +291,29 @@ export default class NPFinder extends React.Component {
 
 						  </section>
 					<br></br>
-					<td >
+
+					
+				  <section>
+				  <br></br>
+				  <div align="center">Top Rated Trails</div>
+				  <table className="attendancetable" align="center">
+				  <tr>
+				  <th>
+       						<div className="temptableheader"><strong>Trail Name</strong></div>
+   							</th>
+    						<th>
+        						<div className="temptableheader"><strong>Trail Distance (Miles) </strong></div>
+ 						    </th>
+    						<th>
+        						<div className="temptableheader"><strong>Trail Rating</strong></div>
+    						</th>
+							</tr>
+			            	{this.state.trails}
+			          	</table>
+
+						  </section>
+					<br></br>
+					<td>
 					<section className="backgroundBlue">
 					<div align="center"><span>&#9788;</span> 5 Day Historical Weather Forcast <span>&#9788;</span></div>						
 					<table className="temptable" align="center">

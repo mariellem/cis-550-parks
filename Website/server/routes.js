@@ -333,6 +333,29 @@ function getBestParkTempByMonth(req, res) {
   });  
 };
 
+function getTrails(req, res) {
+  var inputPark = req.params.parkInput;
+  var query = `
+  with trails as(
+    SELECT p.name as park_name, td.distance, td.description, td.rating, td.placeId
+     FROM trail_details td JOIN places p on p.placeId = td.parkId
+     WHERE p.name LIKE "%${inputPark}%" 
+     ORDER BY rating DESC
+     LIMIT 3
+    )
+    
+    select p.name, t.distance, t.rating, t.description
+    from trails t join places p on t.placeId = p.placeId;
+  `;
+  connection.query(query, function(err, rows, fields){
+    if (err)console.log(err);
+    else {
+      console.log(rows);
+      res.json(rows);
+    }
+  });  
+};
+
 
 
 
@@ -355,5 +378,6 @@ module.exports = {
   getPark5DayWeather:getPark5DayWeather,
   getMonthNames:getMonthNames,
   getBestParkTempByMonth:getBestParkTempByMonth,
-  getMonthlyTrends:getMonthlyTrends
+  getMonthlyTrends:getMonthlyTrends,
+  getTrails: getTrails
 }
