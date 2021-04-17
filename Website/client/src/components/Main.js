@@ -29,7 +29,7 @@ export default class Main extends React.Component {
 	componentDidMount() {
 		let regionInput = this.state.selectedRegion;
 		this.submitPark()
-		
+
 		// // Send an HTTP request to the server.
 		// fetch("http://localhost:8081/parkNames",
 		// {
@@ -103,7 +103,7 @@ export default class Main extends React.Component {
 					console.log(popularParks);
 					//save the image and park details to a park info box object
 					let popularPark = popularParks.map((parkRevObj, i) =>
-					<MainPopularParksRow Park = {parkRevObj.Park} Visitors={parkRevObj.Visitors} />
+					<MainPopularParksRow Park = {parkRevObj.Park} Visitors={parkRevObj.Visitors} imageUrl={parkRevObj.imageUrl} credit={parkRevObj.credit}/>
 					);
 					//update the state to have the park image
 					this.setState({
@@ -167,12 +167,12 @@ export default class Main extends React.Component {
 			</table> */}
 
 			
-				
+
 
 			<div class = "row">
 					<div  class = "column left"><b>An adventure awaits exploring the US National Parks!  Before you hit the road though, let us help you pick the best stops based on region, weather, reviews and attendance.  <br/>
-					<br/> Use Finder tab to explore each individual park. <br/>
-					<br/> Recommendations will provide you some insight into things to consider when you select your final destination. <br/>
+					<br/> Use <a href="/Finder">Finder</a> tab to explore each individual park. <br/>
+					<br/> <a href="/Recommendations">Recommendations</a> will provide you some insight into things to consider when you select your final destination. <br/>
 					<br/> Wherever your adventure leaves you wandering, enjoy and keep safe!</b></div>
 					<div class = "column right"><div className="dropdown-container">
 					<select value={this.state.selectedRegion} onChange={this.handleChange} className="dropdown" id="parksDropdown">

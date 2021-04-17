@@ -22,9 +22,9 @@ export default class MainPopularParksRow extends React.Component {
 				
 				<tr>
 			   
-				{/* <td colspan="2">
+				<td colspan="2">
 				<img class="center" src={this.props.imageUrl} alt={this.props.credit} width="100px" height="120px"></img>
-				</td>  */}
+				</td> 
 				</tr> 
 	
 				<tr>

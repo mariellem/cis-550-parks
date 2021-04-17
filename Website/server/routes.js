@@ -87,10 +87,11 @@ function getPopularParksInRegion(req, res){
   console.log("inputRegion after reset to 0: ")
   console.log(inputRegion)
   var query = `
-  SELECT pl.name AS Park, AVG(a.visitors) AS Visitors
+  SELECT pl.name AS Park, AVG(a.visitors) AS Visitors, ph.image1loc AS imageUrl , ph.image1credit AS credit
   FROM park_attendance a
   JOIN park_details p ON p.parkId = a.parkId 
   JOIN places pl ON p.placeId = pl.placeId 
+  JOIN photos ph ON p.parkID = ph.parkid
   WHERE p.lat<'${highLat}' AND p.lat> '${lowLat}'AND p.lng<'${highLng}' AND p.lng>'${lowLng}' AND a.YEAR >= 2012 AND a.YEAR <= 2016
   GROUP BY p.name
   ORDER BY AVG(a.visitors) DESC
