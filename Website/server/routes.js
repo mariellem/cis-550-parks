@@ -34,16 +34,53 @@ function getParksandStates(req, res){
 }
 
 function getPopularParksInRegion(req, res){
+  console.log("inside Popular function")
+  var inputRegion = req.params.regionInput;
+  console.log("current inputRegion after function set: ")
+  console.log(inputRegion)
+  if (inputRegion == 1) {
+    // Lat/Lng Pacific Region
+    var lowLat = 32.6
+    var highLat = 49
+    var lowLng = -125.3
+    var highLng = -117
+  } else {
+    // All Parks
+    var lowLat = 6
+    var highLat = 74
+    var lowLng = -168
+    var highLng = -43
+  } 
+  console.log("low lat is now:  ")
+  console.log(lowLat)
+  var inputRegion = 0
+  console.log("inputRegion after reset to 0: ")
+  console.log(inputRegion)
   var query = `
   SELECT pl.name AS Park, AVG(a.visitors) AS Visitors
   FROM park_attendance a
   JOIN park_details p ON p.parkId = a.parkId 
   JOIN places pl ON p.placeId = pl.placeId 
-  WHERE p.lat<37 AND p.lat>26 AND p.lng<-95 AND p.lng>-114.7 AND a.YEAR >= 2012 AND a.YEAR <= 2016
+  WHERE p.lat<'${highLat}' AND p.lat> '${lowLat}'AND p.lng<'${highLng}' AND p.lng>'${lowLng}' AND a.YEAR >= 2012 AND a.YEAR <= 2016
   GROUP BY p.name
   ORDER BY AVG(a.visitors) DESC
   LIMIT 3;
   `;
+
+  // var lowLat = req.params.lowLatInput;
+  // var highLat = req.params.highLatInput;
+  // var lowLng = req.params.lowLngInput;
+  // var highLng = req.params.highLngInput;
+  // var query = `
+  // SELECT pl.name AS Park, AVG(a.visitors) AS Visitors
+  // FROM park_attendance a
+  // JOIN park_details p ON p.parkId = a.parkId 
+  // JOIN places pl ON p.placeId = pl.placeId 
+  // WHERE p.lat<'${highLat}' AND p.lat> '${lowLat}'AND p.lng<'${highLng}' AND p.lng>'${lowLng}' AND a.YEAR >= 2012 AND a.YEAR <= 2016
+  // GROUP BY p.name
+  // ORDER BY AVG(a.visitors) DESC
+  // LIMIT 3;
+  // `;
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
     else {

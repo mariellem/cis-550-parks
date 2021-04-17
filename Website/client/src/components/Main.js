@@ -69,8 +69,10 @@ export default class Main extends React.Component {
 		console.log("Submitted the Region")
 		console.log(this.state.selectedRegion)
 		console.log(typeof(this.state.selectedRegion))
-		let parkInput = this.state.selectedRegion;
-		if (parkInput == "true" || parkInput == null) {
+		let regionInput = this.state.selectedRegion;
+		console.log("selectedRegion/value is:  ")
+		console.log(this.state.selectedRegion)
+		if (regionInput == "true" || regionInput == null) {
 			this.setState({
 				opactiy: 0
 			})
@@ -79,12 +81,14 @@ export default class Main extends React.Component {
 				opacity: 1
 			})
 		}
+		
+
 		console.log("opacity is:")
 		console.log(this.state.opacity)
 
 
 				//Fetch the Popular Parks in Region
-				fetch("http://localhost:8081/popularParksInRegion/" ,
+				fetch("http://localhost:8081/popularParksInRegion/" + regionInput,
 				{
 					method: "GET"
 				}).then(res => {
