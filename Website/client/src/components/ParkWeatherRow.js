@@ -8,7 +8,7 @@ export default class ParkWeatherRow extends React.Component {
 
 	render() {
 		return (
-			<tr>
+			<tr align="center">
 				<td>
 				  <div className="park5dayWeather">{this.props.mon}/{this.props.dt}</div>
 				</td>

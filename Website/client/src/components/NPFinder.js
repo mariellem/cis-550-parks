@@ -82,30 +82,7 @@ export default class NPFinder extends React.Component {
 			})
 		}
 		console.log("opacity is:")
-		console.log(this.state.opacity)
-		/*
-		fetch("http://localhost:8081/parkDetails/" + parkInput,
-		{
-			method: "GET"
-		}).then(res => {
-			return res.json();
-		}, err => {
-			console.log(err);
-		}).then(ParkList => {
-			console.log(ParkList); //displays your JSON object in the console
-    	let parkDivs = ParkList.map((parkDetailObj, i) => 
-       	 <ParkDetailRow name={parkDetailObj.name} address={parkDetailObj.address} phoneNumber={parkDetailObj.phoneNumber} rating={parkDetailObj.rating} totalRatings = {parkDetailObj.totalRatings}/>
-    	);
-		//This saves our HTML representation of the data into the state, which we can call in our render function
-		this.setState({
-			parkDetail: parkDivs
-		});
-    	}, err => {
-     	 // Print the error if there is one.
-     	 console.log(err);
-    	});
-		*/
-
+		console.log(this.state.opacity)	
 
 		//Fetch the park detail information and photo and save it to park photo
 		let image2 = "/public/bg.jpg"
@@ -213,31 +190,6 @@ export default class NPFinder extends React.Component {
 		err => {
 			console.log(err)
 		});
-
-
-				// //Fetch the park reviews
-				// fetch("http://localhost:8081/parkReviews/" + parkInput,
-				// {
-				// 	method: "GET"
-				// }).then(res => {
-				// 	return res.json();
-				// }, err => {
-				// 	console.log(err);
-				// }).then(parkReviews => {
-				// 	console.log(parkReviews);
-				// 	//save the image and park details to a park info box object
-				// 	let parkReview = parkReviews.map((parkRevObj, i) =>
-				// 	<ParkReviewRow date = {parkRevObj.reviewDate} rating={parkRevObj.rating} review={parkRevObj.review}/>
-				// 	);
-				// 	this.setState({
-				// 		parkReviews: parkReview
-				// 	})
-					
-		
-				// }, 
-				// err => {
-				// 	console.log(err)
-				// });
 		
 
 		// Fetch the park 5 day weather
@@ -302,18 +254,25 @@ export default class NPFinder extends React.Component {
 			  <table style ={tStyle} class="upper" >
 				<td class="mp-left">
 				<section>
-					
-					
-							<h2 style={hStyle}>NEARBY PARKS</h2>
-							<div className="infobox" id="parkResults" align="center">
-							  {this.state.nearbyParks}
-							</div>
-					    
-					</section>
-					<section>
+				  
+				  <h2 style={hStyle}>Selected Park</h2>
+				  		<div className="infobox" id="parkResults" align="center">
+			            	{this.state.parkPhoto}
+			          	</div>
+				  
+				  </section>
+				  <section>
+				  <br></br>
+				  <table className="attendancetable" align="center">
+				  <th colspan="3" style={hStyle}>Yearly Attendance</th>
+			            	{this.state.parkAttendance}
+			          	</table>
+
+						  </section>
+					<br></br>
 					<td >
-					<section className="backgroundBlue" align="center">
-					<div><span>&#9788;</span> 5 Day Historical Weather Forcast <span>&#9788;</span></div>						
+					<section className="backgroundBlue">
+					<div align="center"><span>&#9788;</span> 5 Day Historical Weather Forcast <span>&#9788;</span></div>						
 					<table className="temptable" align="center">
 						<tr>
     						<th>
@@ -336,27 +295,21 @@ export default class NPFinder extends React.Component {
 						</td>
 						<td>
 						</td>
-					</section> 
 
 				</td>
 				<td class="mp-bordered"></td>
 				<td class="mp-right">
-				<section>
-				  
-				  <h2 style={hStyle}>Selected Park</h2>
-				  		<div className="infobox" id="parkResults" align="center">
-			            	{this.state.parkPhoto}
-			          	</div>
-				  
-				  </section>
-				  <section>
-				  
-				  <table className="attendancetable" align="center">
-				  <th colspan="3" style={hStyle}>Yearly Attendance</th>
-			            	{this.state.parkAttendance}
-			          	</table>
 
-						  </section>
+						  <section>
+					
+					
+							<h2 style={hStyle}>NEARBY PARKS</h2>
+							<div className="infobox" id="parkResults" align="center">
+							  {this.state.nearbyParks}
+							</div>
+					    
+					</section>
+						  <br></br>
 						  <section className="backgroundGray">
 
 						<table className="reviewTable">
@@ -390,19 +343,3 @@ export default class NPFinder extends React.Component {
 		);
 	}
 }
-
-/*
-<div className="jumbotron2">
-				<div className="parks-container">
-				  <div className="park">
-					<div className="header"><strong>Park</strong></div>
-					<div className="header"><strong>Address</strong></div>
-					<div className="header"><strong>Phone Number</strong></div>
-					<div className="header"><strong>Rating</strong></div>
-				  </div>
-				  <div className="parks-container" id="parkResults">
-					{this.state.parkDetail}
-				  </div>
-				</div>
-			  </div>
-			  */

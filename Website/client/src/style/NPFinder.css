@@ -144,17 +144,25 @@ caption {
   text-align: center;
   padding: 100px;
   border: 1px solid #ddd;
+  margin-left: auto;
+  margin-right: auto;
   
 }
 
 .temptableheader{
   padding-left: 15px;
   padding-right: 15px;
+    margin-left: auto;
+  margin-right: auto;
 }
 
 .backgroundBlue {
   vertical-align: top;
   background:rgba(49, 173, 211, 0.5);
+  text-align: center;
+  margin-left: 45px;
+  margin-right: auto;
+  
 }
 .reviewTable{
   padding-bottom: 20px;

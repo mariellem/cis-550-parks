@@ -89,9 +89,9 @@ function getPopularParksInRegion(req, res){
   var query = `
   SELECT pl.name AS Park, AVG(a.visitors) AS Visitors, ph.image1loc AS imageUrl , ph.image1credit AS credit
   FROM park_attendance a
-  JOIN park_details p ON p.parkId = a.parkId 
+  JOIN park_details p ON p.placeId = a.placeId 
   JOIN places pl ON p.placeId = pl.placeId 
-  JOIN photos ph ON p.parkID = ph.parkid
+  JOIN photos ph ON p.placeID = ph.placeid
   WHERE p.lat<'${highLat}' AND p.lat> '${lowLat}'AND p.lng<'${highLng}' AND p.lng>'${lowLng}' AND a.YEAR >= 2012 AND a.YEAR <= 2016
   GROUP BY p.name
   ORDER BY AVG(a.visitors) DESC
@@ -164,7 +164,7 @@ function getParkAttendance(req, res) {
   inputPark = req.params.parkInput
 	var query = `
     SELECT * FROM park_attendance 
-    where parkId in (
+    where placeId in (
       SELECT placeId from places pd
       where pd.name = '${inputPark}'
     ) and year > 2010;
@@ -195,7 +195,7 @@ function getPhotos(req, res) {
 	var query = `
     SELECT * FROM photos ph 
     JOIN park_details pd 
-    on ph.parkId = pd.placeId
+    on ph.placeId = pd.placeId
     JOIN places p on p.placeId = pd.placeId
     WHERE p.name = '${inputPark}';
   `;
@@ -215,7 +215,7 @@ function getNearbyParks(req, res) {
     AS distanceInMiles, p1.rating,  image1loc, image1credit
   FROM (SELECT places.placeId, lng, lat FROM places join park_details on places.placeId = park_details.placeId where places.name='${inputPark}') myPark 
   JOIN park_details p1 ON p1.placeId<>myPark.placeId 
-  JOIN photos ph on ph.parkId = p1.parkId
+  JOIN photos ph on ph.placeId = p1.placeId
   JOIN places p on p1.placeId = p.placeId
   ORDER BY distanceInMiles ASC 
   LIMIT 3;`;
@@ -293,7 +293,7 @@ function getMonthlyTrends(req, res) {
   var inputMonth = req.params.monthInput;
   var query = `
   select p.name, Month(hw.date) AS mo_num, Year(hw.date) AS year, AVG(hw.mintempF) as min_TempF, AVG(hw.maxTempF) as max_TempF, SUM(totalSnow_cm) as total_snow, pa.visitors / 12 as visitors 
-  from park_attendance pa join park_details pd on pa.parkId = pd.placeId 
+  from park_attendance pa join park_details pd on pa.placeId = pd.placeId 
   join historical_weather hw on hw.lat = pd.lat and hw.lng = pd.lng and pa.year = Year(hw.date)
   join places p on p.placeId = pd.placeId
   where Month(hw.date) = ${inputMonth}
