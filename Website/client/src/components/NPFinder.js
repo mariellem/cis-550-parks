@@ -67,7 +67,6 @@ export default class NPFinder extends React.Component {
 		});
 	}
 
-	/* ---- Q3b (Best Genres) ---- */
 	submitPark() {
 		console.log("Submitted the park")
 		console.log(this.state.selectedPark)

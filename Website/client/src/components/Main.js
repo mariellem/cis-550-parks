@@ -63,6 +63,8 @@ export default class Main extends React.Component {
 		this.setState({
 			selectedRegion: e.target.value
 		});
+		console.log("handleChange");
+		console.log(this.state.selectedRegion);
 	}
 
 	submitPark() {
