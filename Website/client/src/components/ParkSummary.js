@@ -30,7 +30,7 @@ export default class ParkPhotoRow extends React.Component {
             <td colspan="2">
             <img class="center" src={this.props.imageUrl} alt={this.props.credit} width="100px" height="120px"></img>
             </td>
-            </tr>
+            </tr> 
 
             <tr>
                 <th>

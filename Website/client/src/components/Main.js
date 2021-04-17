@@ -18,7 +18,7 @@ export default class Main extends React.Component {
 			popularParks: [],
 			park5DayWeathers: [],
 			regions: [],
-			selectedRegion: "",
+			selectedRegion: "0",
 			opacity: 0
 		};
 
@@ -27,31 +27,33 @@ export default class Main extends React.Component {
 	}
 
 	componentDidMount() {
-
-		// Send an HTTP request to the server.
-		fetch("http://localhost:8081/parkNames",
-		{
-		  method: 'GET' // The type of HTTP request.
-		}).then(res => {
-		  // Convert the response data to a JSON.
-		  return res.json();
-		}, err => {
-		  // Print the error if there is one.
-		  console.log(err);
-		}).then(parkList => {
-		  if (!parkList) return;
-		  // Map each placeObj in placeList to an HTML element:
-		  let parkDivs = parkList.map((parkObj, i) =>
-			<option value={parkObj.name}>{parkObj.name}</option>
-		  );
-		  // Set the state of the place list to the value returned by the HTTP response from the server.
-		   this.setState({
-			parks: parkDivs
-		   });
-		}, err => {
-		  // Print the error if there is one.
-		  console.log(err);
-		});
+		let regionInput = this.state.selectedRegion;
+		this.submitPark()
+		
+		// // Send an HTTP request to the server.
+		// fetch("http://localhost:8081/parkNames",
+		// {
+		//   method: 'GET' // The type of HTTP request.
+		// }).then(res => {
+		//   // Convert the response data to a JSON.
+		//   return res.json();
+		// }, err => {
+		//   // Print the error if there is one.
+		//   console.log(err);
+		// }).then(parkList => {
+		//   if (!parkList) return;
+		//   // Map each placeObj in placeList to an HTML element:
+		//   let parkDivs = parkList.map((parkObj, i) =>
+		// 	<option value={parkObj.name}>{parkObj.name}</option>
+		//   );
+		//   // Set the state of the place list to the value returned by the HTTP response from the server.
+		//    this.setState({
+		// 	parks: parkDivs
+		//    });
+		// }, err => {
+		//   // Print the error if there is one.
+		//   console.log(err);
+		// });
 		if (this.state.selectedPark != null) {
 			this.submitPark()
 		}
