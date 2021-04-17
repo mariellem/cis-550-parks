@@ -1,5 +1,5 @@
 .mainContainer {
-    background:rgba(199, 76, 76, 0.8);
+    /* background:rgba(199, 76, 76, 0.8); */
     display: flex;  
     justify-content: center;
   }
@@ -10,12 +10,14 @@
     width: 550px;
 } */
 .column {
+
     float: left;
-    padding: 10px;
-    height: 300px; /* Should be removed. Only for demonstration */
+    padding: 25px;
+    /* height: 300px; Should be removed. Only for demonstration */
     }
     
     .left {
+    background: rgba(242, 241, 245, 0.8);
     width: 25%;
     }
     

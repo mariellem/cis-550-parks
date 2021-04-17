@@ -15,7 +15,7 @@ export default class Main extends React.Component {
 			imageLink: '/public/bg.jpg',
 			parks: [],
 			parkDetail: [],
-			parkReviews: [],
+			popularParks: [],
 			park5DayWeathers: [],
 			regions: [],
 			selectedRegion: "",
@@ -27,11 +27,6 @@ export default class Main extends React.Component {
 	}
 
 	componentDidMount() {
-
-		let regionList = ["Pacific Region", "Rocky Mountain Region", "Southwest Region", "Midwest Region", "Northeast Region", "Southeast Region"];
-		this.setState({
-			regions: regionList
-		});
 
 		// Send an HTTP request to the server.
 		fetch("http://localhost:8081/parkNames",
@@ -89,22 +84,22 @@ export default class Main extends React.Component {
 
 
 				//Fetch the Popular Parks in Region
-				fetch("http://localhost:8081/popularParksInRegion/" + parkInput,
+				fetch("http://localhost:8081/popularParksInRegion/" ,
 				{
 					method: "GET"
 				}).then(res => {
 					return res.json();
 				}, err => {
 					console.log(err);
-				}).then(parkReviews => {
-					console.log(parkReviews);
+				}).then(popularParks => {
+					console.log(popularParks);
 					//save the image and park details to a park info box object
-					let parkReview = parkReviews.map((parkRevObj, i) =>
-					<MainPopularParksRow name = {parkRevObj.name} visitors={parkRevObj.visitors} />
+					let popularPark = popularParks.map((parkRevObj, i) =>
+					<MainPopularParksRow Park = {parkRevObj.Park} Visitors={parkRevObj.Visitors} />
 					);
 					//update the state to have the park image
 					this.setState({
-						parkReviews: parkReview
+						popularParks: popularPark
 					})
 					
 		
@@ -164,14 +159,17 @@ export default class Main extends React.Component {
 			</table> */}
 
 			
-				<div class = "row">
-					<div class = "column left">An adventure awaits exploring the US National Parks!  Before you hit the road though, let us help you pick the best stops based on region, weather, reviews and attendance.  <br/>
+				
+
+			<div class = "row">
+					<div  class = "column left"><b>An adventure awaits exploring the US National Parks!  Before you hit the road though, let us help you pick the best stops based on region, weather, reviews and attendance.  <br/>
 					<br/> Use Finder tab to explore each individual park. <br/>
 					<br/> Recommendations will provide you some insight into things to consider when you select your final destination. <br/>
-					<br/> Wherever your adventure leaves you wandering, enjoy and keep safe!</div>
+					<br/> Wherever your adventure leaves you wandering, enjoy and keep safe!</b></div>
 					<div class = "column right"><div className="dropdown-container">
 					<select value={this.state.selectedRegion} onChange={this.handleChange} className="dropdown" id="parksDropdown">
 						<option select value> -- select a US Region -- </option>
+						<option value="0"> All Parks</option>
 						<option value="1"> Pacific Region </option>
 						<option value="2"> Rocky Mountain Region </option>
 						<option value="3"> Southwest Region </option>
@@ -179,12 +177,25 @@ export default class Main extends React.Component {
 						<option value="5"> Northeast Region </option>
 						<option value="6"> Southeast Region </option>
 					</select>
-					<button className="submit-btn" id="parkSubmitBtn" onClick={this.submitPark}>Submit</button>
+					<button className="submit-btn" id="parkSubmitBtn" onClick={this.submitPark}>Submit</button><br/>
+
+					<table style ={tStyle} class="upper" >
+						<td class="mp-left">
+						<section>
+							<h2 style={hStyle}>MOST POPULAR PARKS</h2>
+							<div className="infobox" id="parkResults" align="center">
+							  {this.state.popularParks}
+							</div>
+						</section>
+						</td>
+					</table>
+
 					</div></div> 
 				</div>
 			
 			</div>
 
+					    
 			{/* <div className="container np-container">
 			  <div className="jumbotron1">
 				<div className="h5">Get National Park Information</div>

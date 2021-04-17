@@ -35,7 +35,7 @@ function getParksandStates(req, res){
 
 function getPopularParksInRegion(req, res){
   var query = `
-  SELECT pl.name AS Park, AVG(a.visitors) AS "Average Visitors (per year 2012-2016)"
+  SELECT pl.name AS Park, AVG(a.visitors) AS Visitors
   FROM park_attendance a
   JOIN park_details p ON p.parkId = a.parkId 
   JOIN places pl ON p.placeId = pl.placeId 
