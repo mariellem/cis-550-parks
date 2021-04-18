@@ -16,10 +16,10 @@ export default class ParkWeatherRow extends React.Component {
 				  <div className="park5dayWeather">{Math.round(this.props.minTemp)}</div>
 				</td>
 				<td>
-				  <div className="park5dayWeather">{Math.round(this.props.maxTemp)}</div>
+				  <div className="park5dayWeather">{Math.round(this.props.aveTemp)}</div>
 				</td>
 				<td>
-				  <div className="park5dayWeather">{Math.round(this.props.aveTemp)}</div>
+				  <div className="park5dayWeather">{Math.round(this.props.maxTemp)}</div>
 				</td>
 			</tr>
 		);

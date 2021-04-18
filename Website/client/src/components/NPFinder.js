@@ -22,6 +22,7 @@ export default class NPFinder extends React.Component {
 			parkDetail: [],
 			parkReviews: [],
 			park5DayWeathers: [],
+			park5DWMissing: "",
 			opacity: 0
 		};
 
@@ -202,9 +203,14 @@ export default class NPFinder extends React.Component {
 			console.log(err);
 		}).then(park5DayWeathers => {
 			console.log(park5DayWeathers);
-			let park5DW = park5DayWeathers.map((park5DWObj, i) =>
+			var park5DW = park5DayWeathers.map((park5DWObj, i) =>
 			<ParkWeatherRow mon = {park5DWObj.mon} dt={park5DWObj.dt} minTemp={park5DWObj.minTemp} maxTemp={park5DWObj.maxTemp} aveTemp={park5DWObj.aveTemp}/>
 			);
+			if (park5DW.length < 1){
+				this.setState({park5DWMissing : "Sorry no weather data available."});
+			} else {
+				this.setState({park5DWMissing : ""});
+			}
 			this.setState({
 				park5DayWeathers: park5DW
 			})
@@ -333,6 +339,7 @@ export default class NPFinder extends React.Component {
     
     						</tr>
 						{this.state.park5DayWeathers}
+						<tr><td colspan="5">{this.state.park5DWMissing}</td></tr>
 						</table>
 						</section>
 						</td>
@@ -358,7 +365,7 @@ export default class NPFinder extends React.Component {
 						<table className="reviewTable">
 							<tr>
 								<td>
-									<div className="header" align="center"><strong>Reviews</strong></div>
+									<div className="header" align="center"><strong>Recent Reviews</strong></div>
 								</td>
 								
 								</tr>
