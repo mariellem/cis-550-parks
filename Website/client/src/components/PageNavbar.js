@@ -31,7 +31,7 @@ export default class PageNavbar extends React.Component {
 		return (
 			<div className="PageNavbar">
 				<nav className="navbar navbar-expand-lg navbar-light bg-light">
-			      <span className="navbar-brand center">National Parks</span>
+			      <span className="navbar-brand center">National Park Planner Plus</span>
 			      <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
 			        <div className="navbar-nav">
 			        {this.state.navDivs}
