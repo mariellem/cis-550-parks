@@ -1,92 +1,13 @@
 import React from 'react';
+import Plot from 'react-plotly.js';
+
 import PageNavbar from './PageNavbar';
 import WeatherDetailRow from './WeatherDetailRow';
-import '../style/NPFinder.css';
+import '../style/ParkRecs.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 var trendsMap = {}; //used for caching the park trends
-
-// class Plot extends React.Component {
-// 	componentDidMount() {
-// 	//   if (!window.google || !window.google.maps) {
-// 		console.log('Hello world');
-
-// 		// const $script = require(`chartjs`);
-// 		$script(
-// 			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>,
-// 		  	this.handlePlotLoad
-// 		);
-// 	//   }
-// 	}
-// 	// componentDidUpdate(prevProps) {
-// 	// 	// @TODO fix update to load things
-//  	//   const { position } = this.props;
-// 	//   if (prevProps.position !== position) {
-// 	// 	this.map && this.map.setCenter(position[0]);
-// 	// 	for (var i = 0; i < position.length; i++) {
-// 	// 		this.marker && this.marker.setPosition(position[i]);
-// 	// 	}
-// 	//   }
-// 	// }
-  
-// 	handlePlotLoad = () => {
-		
-// 	// 	const { position } = this.props;
-// 	//   const {detail} = this.props;
-// 	  const config = {
-// 		type: 'line',
-// 		type: 'bar',
-//     	data: {
-//         	labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-//         	datasets: [{
-// 				label: '# of Votes',
-// 				data: [12, 19, 3, 5, 2, 3],
-// 				backgroundColor: [
-// 					'rgba(255, 99, 132, 0.2)',
-// 					'rgba(54, 162, 235, 0.2)',
-// 					'rgba(255, 206, 86, 0.2)',
-// 					'rgba(75, 192, 192, 0.2)',
-// 					'rgba(153, 102, 255, 0.2)',
-// 					'rgba(255, 159, 64, 0.2)'
-// 				],
-// 				borderColor: [
-// 					'rgba(255, 99, 132, 1)',
-// 					'rgba(54, 162, 235, 1)',
-// 					'rgba(255, 206, 86, 1)',
-// 					'rgba(75, 192, 192, 1)',
-// 					'rgba(153, 102, 255, 1)',
-// 					'rgba(255, 159, 64, 1)'
-// 				],
-// 				borderWidth: 1
-// 			}]
-// 		},
-// 		options: {
-// 			scales: {
-// 				y: {
-// 					beginAtZero: true
-// 				}
-// 			}
-// 		}
-// 		};
-
-// 	this.myChart = new Chart(
-// 		document.getElementById('myChart'),
-// 		config
-// 	);
-// 	console.log(this.myChart);
-    	
-// 	};
-  
-// 	render() { // @TODO why doesnt this work??
-// 	  return <canvas id="myChart" width="800" height="400"></canvas>
-// 	  //<div style={{ height: "350px" }} ref={ref => (this.myChart = ref)} />;
-// 	}
-//   }
-
-
-
-
 
 class GoogleMap extends React.Component {
 	componentDidMount() {
@@ -162,25 +83,6 @@ class GoogleMap extends React.Component {
 	  return <div style={{ height: "350px" }} ref={ref => (this.mapRef = ref)} />;
 	}
   }
-
-  
- class TrendDetail extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-	render() {
-		return (
-			<div className="trendsResults">
-				<div className="name">{this.props.name}</div>
-				<div className="visitors">Attendance: {Math.round(this.props.visitors)} visitors</div>
-				<div className="minTempF">LOW: {Math.round(this.props.min_TempF)} degrees F </div>
-				<div className="maxTempF">HIGH: {Math.round(this.props.max_TempF)} degrees F</div>
-				<div className="total_snow">{Math.round(this.props.total_snow)} inches of snow</div>
-				<br></br>
-			</div>
-		);
-	}
- }
 
   
 export default class ParkRecommendations extends React.Component {
@@ -294,11 +196,17 @@ export default class ParkRecommendations extends React.Component {
 		
 		//fetch the weather and attendance trends
 		if ( (String(monthInput) in trendsMap)) { 
+			// if results are already cached, load from memory instead of re-querying db
 			this.setState({
 				trend: trendsMap[monthInput]
 			});
 		}
 		else {
+			var parkNameArr = [];
+			var visitorArr = [];
+			var minTempArr = [];
+			var maxTempArr = [];
+			var totalSnowArr = [];
 			console.log("Fetching Trends");
 			fetch("http://localhost:8081/trends/" + monthInput,
 		{
@@ -308,20 +216,23 @@ export default class ParkRecommendations extends React.Component {
 		}, err => {
 			console.log(err);
 		}).then(trendList => {
+			
 			console.log("Fetching trend for month:");
 			console.log(trendList);
 
-			let trendDivs = trendList.map((trendDetailObj, i) => 
-				<TrendDetail  
-					name={trendDetailObj.name} 
-					visitors={trendDetailObj.visitors} 
-					min_TempF={trendDetailObj.min_TempF} 
-					max_TempF={trendDetailObj.max_TempF} 
-					total_snow={trendDetailObj.total_snow}/>
-			);
+			
 
-			trendsMap[monthInput] = trendDivs; //"Month is " + monthInput;
-			// console.log(trendsMap[monthInput]);
+			for (var key in trendList) {	
+				parkNameArr.push(trendList[key].name)
+				visitorArr.push(trendList[key].visitors)
+				minTempArr.push(trendList[key].min_TempF)
+				maxTempArr.push(trendList[key].max_TempF)
+				totalSnowArr.push(trendList[key].total_snow)
+
+			}
+
+			// save array of arrays into trendsMap to cache results in case of reload
+			trendsMap[monthInput] = [parkNameArr, visitorArr, minTempArr, maxTempArr, totalSnowArr]; 
 
 			this.setState({
 				trend: trendsMap[monthInput]
@@ -332,85 +243,8 @@ export default class ParkRecommendations extends React.Component {
 		
 	}
 
-
-
-		// //Fetch the park attendance information
-		// fetch("http://localhost:8081/parkAttendance/" + parkInput,
-		// {
-		// 	method: "GET"
-		// }).then(res => {
-		// 	return res.json();
-		// }, err => {
-		// 	console.log(err);
-		// }).then(parkVisitors => {
-		// 	//save the image and park details to a park info box object
-		// 	let attendance = parkVisitors.map((parkObj, i) =>
-		// 	<ParkAttendance year={parkObj.year} visitors={parkObj.visitors}/>
-		// 	);
-		// 	//update the state to have the park image
-		// 	this.setState({
-		// 		parkAttendance: attendance
-		// 	})
-		// 	console.log(this.state.parkAttendance)
-
-		// }, 
-		// err => {
-		// 	console.log(err)
-		// });
-
-		// //Fetch the park reviews
-		// fetch("http://localhost:8081/parkReviews/" + parkInput,
-		// {
-		// 	method: "GET"
-		// }).then(res => {
-		// 	return res.json();
-		// }, err => {
-		// 	console.log(err);
-		// }).then(parkReviews => {
-		// 	console.log(parkReviews);
-		// 	//save the image and park details to a park info box object
-		// 	let parkReview = parkReviews.map((parkRevObj, i) =>
-		// 	<ParkReviewRow date = {parkRevObj.reviewDate} rating={parkRevObj.rating} review={parkRevObj.review}/>
-		// 	);
-		// 	//update the state to have the park image
-		// 	this.setState({
-		// 		parkReviews: parkReview
-		// 	})
-			
-
-		// }, 
-		// err => {
-		// 	console.log(err)
-		// });
-
-		// // Fetch the park 5 day weather
-		// fetch("http://localhost:8081/park5DayWeather/" + parkInput,
-		// {
-		// 	method: "GET"
-		// }).then(res => {
-		// 	return res.json();
-		// }, err => {
-		// 	console.log(err);
-		// }).then(park5DayWeathers => {
-		// 	console.log(park5DayWeathers);
-		// 	let park5DW = park5DayWeathers.map((park5DWObj, i) =>
-		// 	<ParkWeatherRow mon = {park5DWObj.mon} dt={park5DWObj.dt} minTemp={park5DWObj.minTemp} maxTemp={park5DWObj.maxTemp} aveTemp={park5DWObj.aveTemp}/>
-		// 	);
-		// 	this.setState({
-		// 		park5DayWeathers: park5DW
-		// 	})
-			
-
-		// }, 
-		// err => {
-		// 	console.log(err)
-		// });
-
-
-
 	}
 
-	
 	render() {
 		
 		console.log("Selected month is:")
@@ -432,13 +266,10 @@ export default class ParkRecommendations extends React.Component {
 		return (
 
 			<div className="ParkRecommendations" style={{ 	backgroundImage: `url(${this.state.imageLink})`, backgroundSize: 'cover'}}>
-			
-		{/* @TODO figure out how to call plot */}
-			{/* <Plot  />  */}
 
 			<PageNavbar active="Finder" />
-			
 
+			{/* drop down menu options - choose month */}
 			<div className="container np-container">
 			  <div className="jumbotron1">
 				<div className="h3">Trip Planner  </div>
@@ -465,81 +296,127 @@ export default class ParkRecommendations extends React.Component {
 				) : (
 				<div>missing month input</div>
 			)}
-
+		
           <div className="jumbotron">
-            <div className="movies-container">
-              <div className="movies-header">
+            <div className="parks-container">
+              <div className="parks-header">
 				  
               <h2 style={hStyle}>Recommended Parks in  {chosenMonth}</h2>
               </div>
-              <div className="results-container" id="results">
+              {/* <div className="results-container" id="results"> */}
                 {/* {this.state.weatherDetail} */}
-              </div>
-			  <div>The trend is: {this.state.trend}</div>
+              {/* </div> */}
+			  {this.state.trend ? (
+				<div>
+				{/* // weather plot */}
+				<Plot
+					data={[
+					{
+						x: this.state.trend[0],
+						y: this.state.trend[2],
+						type: 'bar',
+						name: 'low'
+					},
+					{
+						x: this.state.trend[0],
+						y: this.state.trend[3],
+						type: 'bar',
+						name: 'high'
+					},
+					{
+						x: this.state.trend[0],
+						y: this.state.trend[4],
+						type: 'scatter',
+						mode: 'markers',
+						marker: {color: 'cornflowerblue',  symbol: 'circle-open', size: 10},
+						name: 'snowfall',
+						yaxis:'y2'
+					}
+					]}
+					layout={{
+						paper_bgcolor: 'rgba(0,0,0,0)',
+						plot_bgcolor: 'rgba(0,0,0,0)',
+						barmode:"group",
+						width: 1200, 
+						height: 700, 
+						title: 'Weather by Park in X',
+						xaxis: {
+							title: {
+								text: 'National Park',
+							},
+							automargin: true
+						},
+						yaxis: {
+							mirror: true, 
+							title: {
+								text: 'Temperature (degrees F)',
+							},
+							overlaying:'y2',
+							range: [-20,120], 
+						},
+						yaxis2: {
+							title: 'Amount of Snowfall (inches)',
+							titlefont: {color: 'cornflowerblue'},
+							tickfont: {color: 'cornflowerblue'},
+							side: 'right',
+							showgrid: false, 
+							range: [-20,120]
+						},
+						legend: {
+							x: 1,
+							xanchor: 'right',
+							y: 1
+						}
+					}}
+				/>
+
+				{/* // visitor plot */}
+				<Plot
+					data={[
+					{
+						x: this.state.trend[0],
+						y: this.state.trend[1],
+						type: 'scatter',
+						mode: 'markers',
+						marker: {color: 'red'},
+						name: 'Number of Visitors'
+					}
+					// {type: 'bar', x: [1, 2, 3], y: [2, 5, 3]},
+					]}
+					layout={{
+						paper_bgcolor: 'rgba(0,0,0,0)',
+  						plot_bgcolor: 'rgba(0,0,0,0)',
+						width: 1200, 
+						height: 700, 
+						title: 'Monthly Attendance by Park',
+						xaxis: {
+							title: {
+								text: 'National Park',
+							},
+							showgrid: false, 
+							automargin: true
+						},
+						yaxis: {
+							title: {
+								text: 'Park Attendance (monthly)',
+							},
+							showgrid: false, 
+							automargin: true
+						}
+					}}
+					/>
+
+					</div>
+					) : (
+						<div>missing month input</div>
+				)}
             </div>
           </div>
 		  
         </div>
 		
-		
-			  {/* <div className="container movies-container">
-				<div className="jumbotron">
-				<div className="parks-container">
-				  <div className="weather-header">
-					<div className="header-lg"><strong>Park</strong></div>
-					<div className="header"><strong>Address</strong></div>
-					<div className="header"><strong>Phone Number</strong></div>
-					<div className="header"><strong>Rating</strong></div>
-					<div className="header"><strong>Rating</strong></div>
-					<div className="header"><strong>Rating</strong></div>
-					<div className="header"><strong>Rating</strong></div>
-					<div className="header"><strong>Rating</strong></div>
-					<div className="header"><strong>Rating</strong></div>
-					<div className="header"><strong>Rating</strong></div>
-					<div className="header"><strong>Rating</strong></div>
-				  </div>
-				  <div className="parks-container" id="parkResults">
-					{this.state.weatherDetail}
-				  </div>
-				</div>
-			  </div>
-			  </div> */}
-
-			  {/* <table style ={tStyle} class="upper">
-				<td class="mp-left">
-				<section>
-					
-					
-							<h2 style={hStyle}>NEARBY PARKS</h2>
-							<div className="infobox" id="parkResults" align="center">
-							  {this.state.nearbyParks}
-							</div>
-					    
-					</section> 
-
-				</td>
-				<td class="mp-bordered"></td>
-				<td class="mp-right">
-				<section>
-				  
-				  <h2 style={hStyle}>Selected Park</h2>
-				  		<div className="infobox" id="parkResults" align="center">
-			            	{this.state.parkPhoto}
-			          	</div>
-				  
-				  </section>
-				 
-				</td>
-				
-
-
-
-			  </table> */}
-			  			
-				
-			  
-			</div>
+ 
 		</div>
-		);
+	</div>);
 	}
 }
