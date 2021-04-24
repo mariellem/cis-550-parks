@@ -135,8 +135,6 @@ export default class NPFinder extends React.Component {
 			this.setState({
 				nearbyParks: nearbyPark
 			})
-			
-
 		}, 
 		err => {
 			console.log(err)
@@ -237,14 +235,10 @@ export default class NPFinder extends React.Component {
 			this.setState({
 				trails: parkT
 			})
-			
-
 		}, 
 		err => {
 			console.log(err)
 		});
-
-
 
 	}
 	render() {
@@ -257,7 +251,6 @@ export default class NPFinder extends React.Component {
 			"opacity":this.state.opacity,
 		};
 		
-
 		return (
 			
 			<div className="NPFinder" style={{ 	backgroundImage: `url(${this.state.imageLink})`, backgroundSize: 'cover'}}>
@@ -357,7 +350,6 @@ export default class NPFinder extends React.Component {
 							<div className="infobox" id="parkResults" align="center">
 							  {this.state.nearbyParks}
 							</div>
-					    
 					</section>
 						  <br></br>
 						  <section className="backgroundGray">
@@ -371,23 +363,13 @@ export default class NPFinder extends React.Component {
 								</tr>
 							{this.state.parkReviews}
 						</table>
-
 					</section>
 				</td>
 				<tr vertical-align="top">
-
-						<td colspan="3">
-					    
-					</td>
-
-						</tr>
-
-
+				<td colspan="3"> 
+				</td>
+				</tr>
 			  </table>
-			  		
-					
-				
-			  
 			</div>
 		</div>
 		);
