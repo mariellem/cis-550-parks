@@ -10,7 +10,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 var trendsMap = {}; //used for caching the park trends
 
 class GoogleMap extends React.Component {
+	constructor(props) {
+		super(props);
+		this.markers = [];
+	}
+	
 	componentDidMount() {
+
 	  if (!window.google || !window.google.maps) {
 		const { googleKey } = this.props;
 
@@ -18,23 +24,83 @@ class GoogleMap extends React.Component {
 		$script(
 		  `https://maps.googleapis.com/maps/api/js?key=${googleKey}`,
 		  this.handleGoogleLoad
+		  
 		);
 	  }
 	}
+
+	
+
 	componentDidUpdate(prevProps) {
-		// @TODO fix update to load new markers in map 
- 	  const { position } = this.props;
-	  if (prevProps.position !== position) {
-		this.map && this.map.setCenter(position[0]);
-		for (var i = 0; i < position.length; i++) {
-			this.marker && this.marker.setPosition(position[i]);
-		}
-	  }
+		// @TODO fix update to load new markers in map ?
+	   const { position, prevposition } = this.props;
+	   console.log("prev", prevposition)
+	   console.log(position)
+	   var is_same = true;
+
+	   if (prevposition!=false){
+			is_same = (prevposition.length == position.length) && prevposition.every(function(element, index) {
+				return element === position[index]; 
+			});
+	   }
+	   
+	   console.log("is_same", is_same)
+	   if (!is_same){
+			var infoWindow = new window.google.maps.InfoWindow(), marker, i;
+			var infoWindowContent = [];
+			for (var j = 0; j < position.length; j++) {
+			const var2 = 'abc'; //@TODO make this work
+			infoWindowContent.push(['<div class="info_content">' +'<h3>'+ 'The London Eye' +'</h3>' + '<p>abcd.</p>' +        '</div>']);
+	
+			}
+	  
+			for (let i = 0; i < this.markers.length; i++) {
+				this.markers[i].setMap(null);
+			  }
+			this.markers = []
+			var bounds = new window.google.maps.LatLngBounds();
+
+			for (var i = 0; i < position.length; i++) {
+			  bounds.extend(position[i]);
+	  
+			   this.marker = new window.google.maps.Marker({
+				  map: this.map,
+				  position: position[i]}
+			  );
+		  
+			  this.marker.setPosition(position[i]);
+	  
+			  // Allow each marker to have an info window    
+			  window.google.maps.event.addListener(this.marker, 'click', (function(marker, i) {
+				  return function() {
+					  infoWindow.setContent(infoWindowContent[i][0]);
+					  infoWindow.open(this.map, marker);
+				  }
+			  })(this.marker, i));
+	  
+			  this.markers.push(this.marker)
+	  
+			  }
+			  // define map bounds using saved bounds	
+			this.map.fitBounds(bounds);
+	  
+
+
+
+	   }
+
+	//    if (prevProps.position !== position) {
+	// 		this.map && this.map.setCenter(position[0]);
+	// 		for (var i = 0; i < position.length; i++) {
+	// 			this.marker && this.marker.setPosition(position[i]);
+	// 		}
+	//   }
 	}
   
 	handleGoogleLoad = () => {
 	  const { position } = this.props;
 	  const {detail} = this.props;
+	//   console.log("orig = ", this.props)
 
 	  var infoWindowContent = [];
 	  for (var j = 0; j < position.length; j++) {
@@ -71,6 +137,7 @@ class GoogleMap extends React.Component {
             }
         })(this.marker, i));
 
+		this.markers.push(this.marker)
 
 		}
 		// define map bounds using saved bounds	
@@ -97,6 +164,7 @@ export default class ParkRecommendations extends React.Component {
 			months: [],
 			weatherDetail: [],
 			positions: false,
+			prevpositions: false,
 			opacity: 0
 		};
 
@@ -184,6 +252,13 @@ export default class ParkRecommendations extends React.Component {
 					month = {weatherDetailObj.month}/>
 			);
 		
+		//iterate over all markers in the map and call them null
+		// save previous positions
+		if (this.state.positions!=false){
+			this.setState({
+				prevpositions: this.state.positions
+			});
+		}
 	
 		//This saves our HTML representation of the data into the state, which we can call in our render function
 		this.setState({
@@ -207,7 +282,7 @@ export default class ParkRecommendations extends React.Component {
 			var minTempArr = [];
 			var maxTempArr = [];
 			var totalSnowArr = [];
-			console.log("Fetching Trends");
+			// console.log("Fetching Trends");
 			fetch("http://localhost:8081/trends/" + monthInput,
 		{
 			method: "GET"
@@ -217,11 +292,9 @@ export default class ParkRecommendations extends React.Component {
 			console.log(err);
 		}).then(trendList => {
 			
-			console.log("Fetching trend for month:");
-			console.log(trendList);
-
-			
-
+			// console.log("Fetching trend for month:");
+			// console.log(trendList)
+		
 			for (var key in trendList) {	
 				parkNameArr.push(trendList[key].name)
 				visitorArr.push(trendList[key].visitors)
@@ -290,7 +363,9 @@ export default class ParkRecommendations extends React.Component {
           	<hr />
 			
 			{this.state.positions ? (
-				<GoogleMap position={this.state.positions}
+				<GoogleMap
+					prevposition={this.state.prevpositions}
+					position={this.state.positions}
 					detail = {this.state.weatherDetail}
 					googleKey={"AIzaSyDIVLDtctP_dXPybzkrHX0yxGnt2yGm7BQ"} />
 				) : (
