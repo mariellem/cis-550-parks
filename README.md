@@ -6,7 +6,7 @@ Group Project
 
 
 <h2> Quick Start </h2>
-To access the project website, run `npm install` from the Website folder. Then, in separate command line instances, run `npm start` in both the client and server folders. This will load the site in your browser. 
+To access the project website, run `npm install` from the Website/client folder. Then, in separate command line instances, run `npm start` in both the client and server folders. This will load the site in your browser. 
 
 <h2>Data Sources </h2>
 
