@@ -93,7 +93,7 @@ function getPopularParksInRegion(req, res){
   JOIN places pl ON p.placeId = pl.placeId 
   JOIN photos ph ON p.placeID = ph.placeid
   WHERE p.lat<'${highLat}' AND p.lat> '${lowLat}'AND p.lng<'${highLng}' AND p.lng>'${lowLng}' AND a.YEAR >= 2012 AND a.YEAR <= 2016
-  GROUP BY p.name
+  GROUP BY p.placeId
   ORDER BY AVG(a.visitors) DESC
   LIMIT 5;
   `;
