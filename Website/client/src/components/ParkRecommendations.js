@@ -2,7 +2,7 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 
 import PageNavbar from './PageNavbar';
-import WeatherDetailRow from './WeatherDetailRow';
+// import WeatherDetailRow from './WeatherDetailRow';
 import '../style/ParkRecs.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -16,7 +16,7 @@ class GoogleMap extends React.Component {
 	}
 	
 	componentDidMount() {
-
+	  // called on creation of map
 	  if (!window.google || !window.google.maps) {
 		const { googleKey } = this.props;
 
@@ -28,126 +28,89 @@ class GoogleMap extends React.Component {
 		);
 	  }
 	}
+	  
+	handleGoogleLoad = () => {
+		this.map = new window.google.maps.Map(this.mapRef, {
+			scaleControl: true,
+			center: null,
+			zoom: 2
+		});
+		this.addMarkers();
+	  };
 
+	addMarkers(){
+		// helper function to add markers to map
+		const { position, parkNames } = this.props;
+
+		var infoWindow = new window.google.maps.InfoWindow(), marker, i;
+		var infoWindowContent = [];
+
+		
+
+		for (var j = 0; j < parkNames.length; j++) {
+			let redirect = "\Finder\?park="+parkNames[j];
+			infoWindowContent.push(['<div class="info_content">' +`<h2><a href=${redirect} target="blank">${parkNames[j]}</a></h2>`+ '<p>abcd.</p>' +        '</div>']);
+
+		}
+		var bounds = new window.google.maps.LatLngBounds();
+		
+		// for each query result, populate markers
+		for (var i = 0; i < position.length; i++) {
+			bounds.extend(position[i]);
+
+			this.marker = new window.google.maps.Marker({
+				map: this.map,
+				position: position[i]}
+			);
+		
+			this.marker.setPosition(position[i]);
+
+			// Allow each marker to have an info window    
+			window.google.maps.event.addListener(this.marker, 'click', (function(marker, i) {
+				return function() {
+					infoWindow.setContent(infoWindowContent[i][0]);
+					infoWindow.open(this.map, marker);
+				}
+			})(this.marker, i));
+			
+			this.markers.push(this.marker)
+		  }
+		// define map bounds using saved bounds	
+		this.map.fitBounds(bounds);
+
+		return
+	}
 	
 
-	componentDidUpdate(prevProps) {
-		// @TODO fix update to load new markers in map ?
+	componentDidUpdate() {
+		// called on update to page
 	   const { position, prevposition } = this.props;
-	   console.log("prev", prevposition)
-	   console.log(position)
+	   // check if the query output has changed, which reflects input month change
 	   var is_same = true;
-
 	   if (prevposition!=false){
+		   	// array equality requires element wise and length comparison
 			is_same = (prevposition.length == position.length) && prevposition.every(function(element, index) {
 				return element === position[index]; 
 			});
 	   }
 	   
-	   console.log("is_same", is_same)
 	   if (!is_same){
-			var infoWindow = new window.google.maps.InfoWindow(), marker, i;
-			var infoWindowContent = [];
-			for (var j = 0; j < position.length; j++) {
-			const var2 = 'abc'; //@TODO make this work
-			infoWindowContent.push(['<div class="info_content">' +'<h3>'+ 'The London Eye' +'</h3>' + '<p>abcd.</p>' +        '</div>']);
-	
-			}
-	  
+			// if month has changed, markers should change to reflect query res
+			// clear old markers
 			for (let i = 0; i < this.markers.length; i++) {
 				this.markers[i].setMap(null);
-			  }
-			this.markers = []
-			var bounds = new window.google.maps.LatLngBounds();
-
-			for (var i = 0; i < position.length; i++) {
-			  bounds.extend(position[i]);
-	  
-			   this.marker = new window.google.maps.Marker({
-				  map: this.map,
-				  position: position[i]}
-			  );
-		  
-			  this.marker.setPosition(position[i]);
-	  
-			  // Allow each marker to have an info window    
-			  window.google.maps.event.addListener(this.marker, 'click', (function(marker, i) {
-				  return function() {
-					  infoWindow.setContent(infoWindowContent[i][0]);
-					  infoWindow.open(this.map, marker);
-				  }
-			  })(this.marker, i));
-	  
-			  this.markers.push(this.marker)
-	  
-			  }
-			  // define map bounds using saved bounds	
-			this.map.fitBounds(bounds);
-	  
-
-
+			}
+			this.markers = [];
+			// add new markers
+			this.addMarkers();
 
 	   }
 
-	//    if (prevProps.position !== position) {
-	// 		this.map && this.map.setCenter(position[0]);
-	// 		for (var i = 0; i < position.length; i++) {
-	// 			this.marker && this.marker.setPosition(position[i]);
-	// 		}
-	//   }
 	}
-  
-	handleGoogleLoad = () => {
-	  const { position } = this.props;
-	  const {detail} = this.props;
-	//   console.log("orig = ", this.props)
 
-	  var infoWindowContent = [];
-	  for (var j = 0; j < position.length; j++) {
-		const var2 = 'abc'; //@TODO make this work
-		infoWindowContent.push(['<div class="info_content">' +'<h3>'+ 'The London Eye' +'</h3>' + '<p>abcd.</p>' +        '</div>']);
-
-	  }
-    
-	  this.map = new window.google.maps.Map(this.mapRef, {
-		scaleControl: true,
-		center: null,
-		zoom: 2
-	  });
-
-	  var infoWindow = new window.google.maps.InfoWindow(), marker, i;
-
-	  var bounds = new window.google.maps.LatLngBounds();
-
-	  for (var i = 0; i < position.length; i++) {
-		bounds.extend(position[i]);
-
-	 	this.marker = new window.google.maps.Marker({
-			map: this.map,
-			position: position[i]}
-		);
-	
-		this.marker.setPosition(position[i]);
-
-		// Allow each marker to have an info window    
-        window.google.maps.event.addListener(this.marker, 'click', (function(marker, i) {
-            return function() {
-                infoWindow.setContent(infoWindowContent[i][0]);
-                infoWindow.open(this.map, marker);
-            }
-        })(this.marker, i));
-
-		this.markers.push(this.marker)
-
-		}
-		// define map bounds using saved bounds	
-	  this.map.fitBounds(bounds);
-
-    	
-	};
-  
-	render() {
-	  return <div style={{ height: "350px" }} ref={ref => (this.mapRef = ref)} />;
+  	render() {
+		// render map results
+		return <div style={{ height: "550px" }} ref={ref => (this.mapRef = ref)} />;
 	}
   }
 
@@ -188,7 +151,7 @@ export default class ParkRecommendations extends React.Component {
 		  if (!monthList) return;
 		  // Map each placeObj in placeList to an HTML element:
 		  let monthDivs = monthList.map((monthObj, i) =>
-			<option value={monthObj.mo_num}>{monthObj.month}</option>
+			<option key={monthObj.mo_num} value={monthObj.mo_num}>{monthObj.month}</option>
 		  );
 		  // Set the state of the place list to the value returned by the HTTP response from the server.
 		   this.setState({
@@ -227,6 +190,7 @@ export default class ParkRecommendations extends React.Component {
 		// get results of query for recommended parks by month
 		// @TODO write info box on page to explain results
 		var locsArray = [];
+		var nameArray = [];
 		fetch("http://localhost:8081/recommendations/" + monthInput,
 		{
 			method: "GET"
@@ -238,19 +202,20 @@ export default class ParkRecommendations extends React.Component {
 			// add each result lat,long to array for map markers				
 			for (var i = 0; i < weatherList.length; i++) {	
 				locsArray.push({ lat: Number(weatherList[i].lat), lng: Number(weatherList[i].lng) });
+				nameArray.push(weatherList[i].name);
 			}
-    		let weatherDivs = weatherList.map((weatherDetailObj, i) => 
-				<WeatherDetailRow 
-					name={weatherDetailObj.name} 
-					state={weatherDetailObj.state} 
-					high={weatherDetailObj.high} 
-					low={weatherDetailObj.low} 
-					average={weatherDetailObj.average} 
-					sunHours={weatherDetailObj.sunHours} 
-					snowfall={weatherDetailObj.snowfall} 
-					uvIndex={weatherDetailObj.uvIndex} 
-					month = {weatherDetailObj.month}/>
-			);
+    		// let weatherDivs = weatherList.map((weatherDetailObj, i) => 
+			// 	<WeatherDetailRow 
+			// 		name={weatherDetailObj.name} 
+			// 		state={weatherDetailObj.state} 
+			// 		high={weatherDetailObj.high} 
+			// 		low={weatherDetailObj.low} 
+			// 		average={weatherDetailObj.average} 
+			// 		sunHours={weatherDetailObj.sunHours} 
+			// 		snowfall={weatherDetailObj.snowfall} 
+			// 		uvIndex={weatherDetailObj.uvIndex} 
+			// 		month = {weatherDetailObj.month}/>
+			// );
 		
 		//iterate over all markers in the map and call them null
 		// save previous positions
@@ -262,7 +227,7 @@ export default class ParkRecommendations extends React.Component {
 	
 		//This saves our HTML representation of the data into the state, which we can call in our render function
 		this.setState({
-			weatherDetail: weatherDivs,
+			resParkNames: nameArray,
 			positions: locsArray
 		});
     	}, err => {
@@ -366,7 +331,7 @@ export default class ParkRecommendations extends React.Component {
 				<GoogleMap
 					prevposition={this.state.prevpositions}
 					position={this.state.positions}
-					detail = {this.state.weatherDetail}
+					parkNames = {this.state.resParkNames}
 					googleKey={"AIzaSyDIVLDtctP_dXPybzkrHX0yxGnt2yGm7BQ"} />
 				) : (
 				<div>missing month input</div>
