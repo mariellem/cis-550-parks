@@ -10,44 +10,26 @@
   background:rgba(200, 200, 200, 0.8);
 }
 
+.column2 {
 
+  float: left;
+  padding: 25px;
+  }
+  
+  .left {
+  background: rgba(172, 185, 219, 0.8);
+  width: 25%;
+  }
+  
+  .right {
+  background: rgba(242, 241, 245, 0.8);
+  width: 75%;
+  }
 
-.parks-container {
+.parks-container2 {
   display: flex;
   flex-flow: column wrap;
   margin-top: 10px;
-}
-
-/* .parks-container .park {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  height: 40px;
-  padding: 0 10px;
-} */
-
-/* .parks-container .parkResults {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  height: 40px;
-  padding: 0 10px;
-} */
-
-/* .parks-container .parkReviews {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: left;
-  height: 40px;
-  padding: 0 10px;
-} */
-
-.parkReviews {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: left;
-  height: 40px;
-  padding: 0 10px;
 }
 
 .parks-container .parkPhoto {
@@ -98,9 +80,41 @@
   background: #f5faff9f;
 }
 
+select {
+  margin: 25px;
+  width: 350px;
+  padding: 5px 35px 5px 20px;
+  font-size: 16px;
+  border: 3px solid #CCC;
+  border-radius:2em;
+  height: 40px;
+  font-family:'Roboto',sans-serif;
+  font-weight:500;
+  appearance: none;
+}
+
+
+button {
+  height: 35px;
+  padding: 0.1em 1.2em;
+  margin: 0 0.5em 0.3em 0;
+  border: 3px solid #CCC;
+  border-radius:2em;
+  box-sizing: border-box;
+  text-decoration:none;
+  font-family:'Roboto',sans-serif;
+  font-weight:500;
+  text-align:center;
+}
+
+button:hover{
+  background-color: rgba(172, 185, 219, 0.8);
+}
+
 .infobox caption, .infobox-title {
     padding: 0.2em;
 }
+
 
 .infobox .infobox-above, .infobox caption, .infobox-title {
     font-size: 125%;

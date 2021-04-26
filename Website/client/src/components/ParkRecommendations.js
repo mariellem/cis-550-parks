@@ -2,7 +2,6 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 
 import PageNavbar from './PageNavbar';
-// import WeatherDetailRow from './WeatherDetailRow';
 import '../style/ParkRecs.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -33,30 +32,37 @@ class GoogleMap extends React.Component {
 		this.map = new window.google.maps.Map(this.mapRef, {
 			scaleControl: true,
 			center: null,
-			zoom: 2
+			zoom: 3
 		});
 		this.addMarkers();
 	  };
 
 	addMarkers(){
 		// helper function to add markers to map
-		const { position, parkNames } = this.props;
-
+		const { position, parkNames, parkStats } = this.props;
 		var infoWindow = new window.google.maps.InfoWindow(), marker, i;
 		var infoWindowContent = [];
 
-		
+		console.log(parkStats);
+		for (var id = 0; id < parkNames.length; id++)  {
 
-		for (var j = 0; j < parkNames.length; j++) {
-			let redirect = "\Finder\?park="+parkNames[j];
-			infoWindowContent.push(['<div class="info_content">' +`<h2><a href=${redirect} target="blank">${parkNames[j]}</a></h2>`+ '<p>abcd.</p>' +        '</div>']);
-
+			// link in marker label
+			let redirect = "\Finder\?park="+encodeURI(parkNames[id]);
+			// 
+			infoWindowContent.push(['<div className="info_content">'+
+								`<h5><a href=${redirect} target="blank">${parkNames[id]}</a></h5>`+ 
+								   `<p> Daily Average: ${parkStats[id].avgTemp}&#730 F <br/>
+										approx. ${parkStats[id].sunHours} Sun Hours <br/>
+										UV Index of ${parkStats[id].uvIndex} <br/>
+								   </p>  </div>`]);
 		}
 		var bounds = new window.google.maps.LatLngBounds();
+		bounds.extend({ lat: Number(45), lng: Number(-69) });
 		
 		// for each query result, populate markers
 		for (var i = 0; i < position.length; i++) {
 			bounds.extend(position[i]);
+
 
 			this.marker = new window.google.maps.Marker({
 				map: this.map,
@@ -77,6 +83,7 @@ class GoogleMap extends React.Component {
 		  }
 		// define map bounds using saved bounds	
 		this.map.fitBounds(bounds);
+		// this.map.setZoom(3);
 
 		return
 	}
@@ -110,7 +117,7 @@ class GoogleMap extends React.Component {
 
   	render() {
 		// render map results
-		return <div style={{ height: "550px" }} ref={ref => (this.mapRef = ref)} />;
+		return <div style={{ height: "500px" }} ref={ref => (this.mapRef = ref)} />;
 	}
   }
 
@@ -174,8 +181,6 @@ export default class ParkRecommendations extends React.Component {
 	}
 	
 	submitMonth() {
-		console.log("Submitted the month")
-		console.log(this.state.selectedMonth)
 		let monthInput = this.state.selectedMonth;
 		if (monthInput == "true" || monthInput == null) {
 			this.setState({
@@ -191,6 +196,7 @@ export default class ParkRecommendations extends React.Component {
 		// @TODO write info box on page to explain results
 		var locsArray = [];
 		var nameArray = [];
+		var statsArray = [];
 		fetch("http://localhost:8081/recommendations/" + monthInput,
 		{
 			method: "GET"
@@ -203,19 +209,11 @@ export default class ParkRecommendations extends React.Component {
 			for (var i = 0; i < weatherList.length; i++) {	
 				locsArray.push({ lat: Number(weatherList[i].lat), lng: Number(weatherList[i].lng) });
 				nameArray.push(weatherList[i].name);
+				statsArray.push({avgTemp: Math.round(weatherList[i].average), 
+								snowFall: weatherList[i].snowfall.toFixed(1),
+								sunHours: Math.round(weatherList[i].sunHours),
+								uvIndex: Math.round(weatherList[i].uvIndex)});
 			}
-    		// let weatherDivs = weatherList.map((weatherDetailObj, i) => 
-			// 	<WeatherDetailRow 
-			// 		name={weatherDetailObj.name} 
-			// 		state={weatherDetailObj.state} 
-			// 		high={weatherDetailObj.high} 
-			// 		low={weatherDetailObj.low} 
-			// 		average={weatherDetailObj.average} 
-			// 		sunHours={weatherDetailObj.sunHours} 
-			// 		snowfall={weatherDetailObj.snowfall} 
-			// 		uvIndex={weatherDetailObj.uvIndex} 
-			// 		month = {weatherDetailObj.month}/>
-			// );
 		
 		//iterate over all markers in the map and call them null
 		// save previous positions
@@ -228,7 +226,8 @@ export default class ParkRecommendations extends React.Component {
 		//This saves our HTML representation of the data into the state, which we can call in our render function
 		this.setState({
 			resParkNames: nameArray,
-			positions: locsArray
+			positions: locsArray,
+			stats: statsArray
 		});
     	}, err => {
      	 	console.log(err);
@@ -247,7 +246,6 @@ export default class ParkRecommendations extends React.Component {
 			var minTempArr = [];
 			var maxTempArr = [];
 			var totalSnowArr = [];
-			// console.log("Fetching Trends");
 			fetch("http://localhost:8081/trends/" + monthInput,
 		{
 			method: "GET"
@@ -285,11 +283,9 @@ export default class ParkRecommendations extends React.Component {
 
 	render() {
 		
-		console.log("Selected month is:")
-		console.log(this.state.selectedMonth)
 		let hStyle = {
-			"text-align": 'center',
-			"text-transform": 'uppercase',
+			"textAlign": 'center',
+			"textTransform": 'uppercase',
 			"opacity":this.state.opacity,
 		};
 		let tStyle = {
@@ -305,50 +301,42 @@ export default class ParkRecommendations extends React.Component {
 
 			<div className="ParkRecommendations" style={{ 	backgroundImage: `url(${this.state.imageLink})`, backgroundSize: 'cover'}}>
 
-			<PageNavbar active="Finder" />
+			<PageNavbar active="Recommendations" />
+			<div className="mainContainer" > 
+			<div className = "row">
+					<div  className = "column2 left">
+						<b>An adventure awaits exploring the US National Parks! 
+						<br/>
+						<br/> Use the dropdown on the right to select your travel month. <br/> <br/>
+						The map will show you the National Parks with the best weather that month. We've identified the best weather for hiking and exploring as anywhere in the 50-60 degrees Fahrenheit range. <br/> <br/>
+						Click on the map markers to learn more about your recommended parks!</b> <br/> <br/> <br/> 
+						Additionally, the plots represent the weather in the selected month at each national park, as well as the monthly visitors per park.
+					 </div>
+					<div className = "column2 right"><div className="dropdown-container"></div>
 
-			{/* drop down menu options - choose month */}
-			<div className="container np-container">
-			  <div className="jumbotron1">
-				<div className="h3">Trip Planner  </div>
-
-				<div className="years-container">
-				  <div className="dropdown-container">
-					  Find the best parks to visit in the month of: 	   
-					<select value={this.state.selectedMonth} onChange={this.handleChange} className="dropdown" id="parksDropdown">
-						<option select value> -- select a month -- </option>
-						{this.state.months}
-					</select>
-					<button className="submit-btn" id="decadesSubmitBtn" onClick={this.submitMonth}>Search</button>
-				  </div>
-				</div>
-			  </div>
-
-			  <div className="container movies-container">
-          	<hr />
-			
+						<div className="dropdown-container">
+							Find the best parks to visit in the month of: <br/> 	   
+							 <select value={this.state.selectedMonth} onChange={this.handleChange} className="dropdown" id="parksDropdown">
+								<option select value>   --   select a month   --   </option>
+								 {this.state.months}
+							</select>
+							<button className="button3" id="button3" onClick={this.submitMonth}>Search</button>
+						</div>
+									
 			{this.state.positions ? (
 				<GoogleMap
 					prevposition={this.state.prevpositions}
 					position={this.state.positions}
 					parkNames = {this.state.resParkNames}
+					parkStats = {this.state.stats}
 					googleKey={"AIzaSyDIVLDtctP_dXPybzkrHX0yxGnt2yGm7BQ"} />
 				) : (
-				<div>missing month input</div>
+				<div> </div>
 			)}
 		
-          <div className="jumbotron">
-            <div className="parks-container">
-              <div className="parks-header">
-				  
-              <h2 style={hStyle}>Recommended Parks in  {chosenMonth}</h2>
-              </div>
-              {/* <div className="results-container" id="results"> */}
-                {/* {this.state.weatherDetail} */}
-              {/* </div> */}
+            <div className="parks-container2">
 			  {this.state.trend ? (
 				<div>
-				{/* // weather plot */}
 				<Plot
 					data={[
 					{
@@ -377,13 +365,15 @@ export default class ParkRecommendations extends React.Component {
 						paper_bgcolor: 'rgba(0,0,0,0)',
 						plot_bgcolor: 'rgba(0,0,0,0)',
 						barmode:"group",
-						width: 1200, 
+						width: 1100, 
 						height: 700, 
-						title: 'Weather by Park in X',
+						title: `Weather by National Park in ${chosenMonth}`,
 						xaxis: {
 							title: {
 								text: 'National Park',
 							},
+							tickmode:'linear',
+							tickangle: 275,
 							automargin: true
 						},
 						yaxis: {
@@ -392,7 +382,7 @@ export default class ParkRecommendations extends React.Component {
 								text: 'Temperature (degrees F)',
 							},
 							overlaying:'y2',
-							range: [-20,120], 
+							range: [-10,125], 
 						},
 						yaxis2: {
 							title: 'Amount of Snowfall (inches)',
@@ -400,7 +390,7 @@ export default class ParkRecommendations extends React.Component {
 							tickfont: {color: 'cornflowerblue'},
 							side: 'right',
 							showgrid: false, 
-							range: [-20,120]
+							range: [-10,125]
 						},
 						legend: {
 							x: 1,
@@ -426,13 +416,15 @@ export default class ParkRecommendations extends React.Component {
 					layout={{
 						paper_bgcolor: 'rgba(0,0,0,0)',
   						plot_bgcolor: 'rgba(0,0,0,0)',
-						width: 1200, 
+						width: 1100, 
 						height: 700, 
 						title: 'Monthly Attendance by Park',
 						xaxis: {
 							title: {
 								text: 'National Park',
 							},
+							tickmode:'linear',
+							tickangle:275,
 							showgrid: false, 
 							automargin: true
 						},
@@ -448,15 +440,17 @@ export default class ParkRecommendations extends React.Component {
 
 					</div>
 					) : (
-						<div>missing month input</div>
+						<div> </div>
 				)}
-            </div>
+            {/* </div> */}
           </div>
-		  
-        </div>
+			
+				</div>
+
 		
  
 		</div>
+	</div>
 	</div>);
 	}
 }
