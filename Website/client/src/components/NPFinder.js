@@ -232,6 +232,9 @@ export default class NPFinder extends React.Component {
 			let parkT = parkTrails.map((ptObj, i) =>
 			<TrailInfoBox name = {ptObj.name} rating = {ptObj.rating} distance = {ptObj.distance}/>
 			);
+			if (parkT.length < 1){
+				parkT = <TrailInfoBox name="Sorry, no trail info!"/>;
+			}
 			this.setState({
 				trails: parkT
 			})
