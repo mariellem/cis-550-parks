@@ -1,0 +1,189 @@
+.Rec {
+  padding: auto;
+}
+
+.backgroundClear {
+  background:rgba(0.0, 0.0, 0.0, 0.0);
+}
+
+.backgroundGray {
+  background:rgba(200, 200, 200, 0.8);
+}
+
+.column2 {
+
+  float: left;
+  padding: 25px;
+  }
+  
+  .left {
+  background: rgba(172, 185, 219, 0.8);
+  width: 25%;
+  }
+  
+  .right {
+  background: rgba(242, 241, 245, 0.8);
+  width: 75%;
+  }
+
+.parks-container2 {
+  display: flex;
+  flex-flow: column wrap;
+  margin-top: 10px;
+}
+
+.parks-container .parkPhoto {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 400px;
+  padding: 0 10px;
+}
+
+.parks-container .infobox{
+  border: 1px solid #a2a9b1;
+  border-spacing: 3px;
+  background-color:#f8f9fa;
+  color: black;
+  margin: 0.5em 0 0.5em 1em;
+  padding: 0.2em;
+  float: right;
+  clear: right;
+  font-size: 88%;
+  line-height: 1.5em;
+  width: 22em;
+}
+
+.parks-container .upper{
+  width: 100%;
+    margin-top: 4px;
+    margin-bottom: 0;
+    border-spacing: 0;
+    border-collapse: separate;
+}
+
+.mp-bordered {
+  border-width: 1px;
+    border-style: solid;
+}
+
+.mp-right {
+  width: 50%;
+  border-color: #cedff2;
+  background: #f5faff9f;
+  align: right
+}
+
+.mp-left {
+  width: 50%;
+  border-color: #cedff2;
+  background: #f5faff9f;
+}
+
+select {
+  margin: 25px;
+  width: 350px;
+  padding: 5px 35px 5px 20px;
+  font-size: 16px;
+  border: 3px solid #CCC;
+  border-radius:2em;
+  height: 40px;
+  font-family:'Roboto',sans-serif;
+  font-weight:500;
+  appearance: none;
+}
+
+
+button {
+  height: 35px;
+  padding: 0.1em 1.2em;
+  margin: 0 0.5em 0.3em 0;
+  border: 3px solid #CCC;
+  border-radius:2em;
+  box-sizing: border-box;
+  text-decoration:none;
+  font-family:'Roboto',sans-serif;
+  font-weight:500;
+  text-align:center;
+}
+
+button:hover{
+  background-color: rgba(172, 185, 219, 0.8);
+}
+
+.infobox caption, .infobox-title {
+    padding: 0.2em;
+}
+
+
+.infobox .infobox-above, .infobox caption, .infobox-title {
+    font-size: 125%;
+    font-weight: bold;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+
+}
+
+caption {
+    display: table-caption;
+    text-align: -webkit-center;
+}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+
+.park .header, .parkResults .name, .parkResults .address, .parkResults .phoneNumber, .parkResults .rating, .parkResults .totalRatings {
+  flex: 1 0 25%;
+}
+
+.park .header, .parkReviews .review{
+  flex: 1 0 25%;
+}
+
+.parkReviews .rating{
+  flex: 1 0 25%;
+  line-height: 75%;
+}
+
+
+.temptable, .attendancetable{
+  text-align: center;
+  padding: 100px;
+  border: 1px solid #ddd;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+
+.temptableheader{
+  padding-left: 15px;
+  padding-right: 15px;
+    margin-left: auto;
+  margin-right: auto;
+}
+
+.backgroundBlue {
+  vertical-align: top;
+  background:rgba(49, 173, 211, 0.5);
+  text-align: center;
+  margin-left: 45px;
+  margin-right: auto;
+  
+}
+.reviewTable{
+  padding-bottom: 20px;
+}
+.reviewTable .rating{
+  font-family: 'Times New Roman', Times, serif;
+  line-height: 100%;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+}

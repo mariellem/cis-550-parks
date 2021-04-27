@@ -297,7 +297,7 @@ function getMonthlyTrends(req, res) {
   join historical_weather hw on hw.lat = pd.lat and hw.lng = pd.lng and pa.year = Year(hw.date)
   join places p on p.placeId = pd.placeId
   where Month(hw.date) = ${inputMonth}
-  group by pd.name, Month(hw.date), year(hw.date)
+  group by p.name, Month(hw.date), year(hw.date)
   order by visitors desc;`;
 
   connection.query(query, function(err, rows, fields){
