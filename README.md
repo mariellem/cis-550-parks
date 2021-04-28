@@ -3,7 +3,6 @@ CIS 550: Databases & Information Systems
 Group Project
 
 <h1> Parks Planner Plus </h1>
-<h2> The US National Parks Trip Planner Webiste>
 
 
 <h2> Quick Start Instructions </h2>
