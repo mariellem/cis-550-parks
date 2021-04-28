@@ -314,7 +314,7 @@ export default class NPFinder extends React.Component {
 					<br></br>
 					<td>
 					<section className="backgroundBlue">
-					<div align="center"><span>&#9788;</span> 5 Day Historical Weather Forcast <span>&#9788;</span></div>						
+					<div align="center"><span>&#9788;</span> 5 Day Historical Weather Forecast <span>&#9788;</span></div>						
 					<table className="temptable" align="center">
 						<tr>
     						<th>
