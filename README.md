@@ -24,7 +24,7 @@ To run the application, first ensure that you are running macOS (10.12 Sierra or
 After cloning the repository, navigate to the _Webiste/client_ directory in your terminal. Run `npm install`  from this directory. Then, run `npm start` . 
 
 
-Then, open a second terminal window, and navigate to the _Website/server_ directory. From this directory, run `npm start` . This should launch the Park Planner Plus application in your local browser window, where you can interact with the website.  
+Then, open a second terminal window, and navigate to the _Website/server_ directory. From this directory, run `npm install`, then run `npm start` . This should launch the Park Planner Plus application in your local browser window, where you can interact with the website.  
 
 
 <h2> Package Dependencies </h2>
